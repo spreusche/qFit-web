@@ -1,24 +1,27 @@
 <template>
   <v-app>
-   
-
     <v-main>
-      <Toolbar/>
-      <Explorar/>
+      <Toolbar v-if="isNotHome"/>
+      <router-view/>
     </v-main>
   </v-app>
 </template>
 
 <script>
-import Explorar from './components/Explorar';
+
 import Toolbar from './components/Toolbar';
 
 export default {
   name: 'App',
 
   components: {
-    Explorar,
     Toolbar
+  },
+
+  computed: { 
+    isNotHome() {
+      return this.$route.path != '/'
+    }
   },
 
   data: () => ({

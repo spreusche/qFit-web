@@ -1,11 +1,9 @@
 <template >
     <v-container fluid  id="Explorar">
         <v-row>
-            <v-col cols="3">
-                <h1>Explorar</h1>
-            </v-col>
             <v-col>
-                <h5>Descubre rutinas de otros entrenadores</h5>
+                <h1>Explorar</h1>
+                <p class="text--secondary"> Descubre rutinas de otros entrenadores</p>
             </v-col>
         </v-row>
         

@@ -3,15 +3,15 @@
       
     <v-toolbar color="#2D2D2A" dark>
       
-      <img class="mr-7" :src="require('../assets/logo-qfit.png')" height="100%" />
+      <img :src="require('../assets/logo-qfit.png')" height="100%" />
       <v-toolbar-title> 
       </v-toolbar-title>
       
       <v-col>
-        <v-tabs align-with-title background-color="#2D2D2A" slider-color="#00e140">
-          <v-tab>Mis Rutinas</v-tab>
-          <v-tab>Mis Ejercicios</v-tab>
-          <v-tab>Explorar</v-tab>
+        <v-tabs align-with-title background-color="#2D2D2A" grow slider-color="#00e140">
+          <v-tab to="/MisRutinas">Mis Rutinas</v-tab>
+          <v-tab to="/MisEjercicios">Mis Ejercicios</v-tab>
+          <v-tab to="/Explorar">Explorar</v-tab>
         </v-tabs>
       </v-col>
 
