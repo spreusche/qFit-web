@@ -1,7 +1,7 @@
 <template>
   <v-app>
+    <Toolbar v-if="isNotHome"/>
     <v-main>
-      <Toolbar v-if="isNotHome"/>
       <router-view/>
     </v-main>
   </v-app>
