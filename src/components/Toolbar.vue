@@ -15,6 +15,7 @@
         </v-tabs>
       </v-col>
 
+<!--Search Bar -->
       <v-col>
         <v-text-field
         append-icon="mdi-magnify"
@@ -31,6 +32,7 @@
         <v-icon>mdi-bell</v-icon>
       </v-btn>
 
+<!--Account btn/dropdown -->
       <v-menu offset-y>
         <template v-slot:activator="{ on, attrs }">
           <v-btn icon v-bind="attrs" v-on="on">
@@ -38,7 +40,6 @@
           </v-btn>
         </template>
       <v-list>
-
         <template>
           <v-row justify="center">
             <v-dialog
