@@ -27,7 +27,7 @@
         ></v-text-field>
       </v-col>
 
-      <v-btn icon to='/Notificaciones'>
+      <v-btn icon >
         <v-icon>mdi-bell</v-icon>
       </v-btn>
 
@@ -53,80 +53,107 @@
                 </v-list-item>
               </template>
               <v-card>
-                <v-card-title>
-                  <span align="center" class="headline">Editar Perfil</span>
-                </v-card-title>
+                 <v-toolbar
+                    flat
+                    dark
+                    color="#2d2d2a"
+                  >
+                    <v-btn
+                      icon
+                      dark
+                      @click="dialog = false"
+                    >
+                      <v-icon>mdi-close</v-icon>
+                    </v-btn>
+                    <v-toolbar-title>
+                      <h2>Editar Perfil</h2>
+                    </v-toolbar-title>
+                    <v-spacer></v-spacer>
+                    
+                      <v-btn
+                        color="#00e140"
+                        dark
+                        class="caja"
+                        @click="dialog = false"
+                      >
+                        GUARDAR
+                      </v-btn>
+                    
+                  </v-toolbar>
+              
                 <v-card-text>
                   <v-container>
                     <v-row>
-                      <v-col cols="12">
+                      <v-col>
                         <v-row>
+                          <v-col>
                             <v-text-field
                               label="Nombre"
                               required
+                              filled
                             ></v-text-field>
-                        </v-row>
-                          <v-row>
+                          </v-col>
+                          <v-col>
                             <v-text-field
                               label="Apellido"
                               persistent-hint
                               required
+                              filled
                             ></v-text-field>
+                          </v-col>
+                        </v-row>
+                          
+                          <v-row>
+                            <v-col>
+                              <v-text-field
+                                label="Usuario"
+                                required
+                                filled
+                              ></v-text-field>
+                            </v-col>
+                            <v-col>
+                              <v-menu
+                                ref="menu"
+                                v-model="menu"
+                                :close-on-content-click="false"
+                                transition="scale-transition"
+                                offset-y
+                                max-width="290px"
+                                min-width="290px"
+                              >
+                                <template v-slot:activator="{ on, attrs }">
+                                  <v-text-field
+                                    label="Fecha de nacimiento"
+                                    v-bind="attrs"
+                                    @blur="date = parseDate(dateFormatted)"
+                                    v-on="on"
+                                  ></v-text-field>
+                                </template>
+                                <v-date-picker
+                                  v-model="date"
+                                  no-title
+                                  @input="menu = false"
+                                ></v-date-picker>
+                              </v-menu>
+                            </v-col>
                           </v-row>
                           <v-row>
                             <v-text-field
-                              label="Usuario"
+                              label="Biografía"
                               required
+                              filled
                             ></v-text-field>
-                          </v-row>
-                          <v-row>
-                            <v-menu
-                              ref="menu"
-                              v-model="menu"
-                              :close-on-content-click="false"
-                              transition="scale-transition"
-                              offset-y
-                              min-width="290px"
-                            >
-                              <template v-slot:activator="{ on, attrs }">
-                                <v-text-field
-                                  v-model="date"
-                                  label="Fecha de nacimiento"
-                                  readonly
-                                  v-bind="attrs"
-                                  v-on="on"
-                                ></v-text-field>
-                              </template>
-                              <v-date-picker
-                                ref="picker"
-                                v-model="date"
-                                :max="new Date().toISOString().substr(0, 10)"
-                                min="1950-01-01"
-                                @change="save"
-                              ></v-date-picker>
-                            </v-menu>
-                          </v-row>
+                        </v-row>
+                        <v-row>
+                            <v-text-field
+                              label="Contacto"
+                              filled
+                            ></v-text-field>
+                        </v-row>
                       </v-col>
                     </v-row>
                   </v-container>
                 </v-card-text>
-                <v-card-actions>
-                  <v-spacer></v-spacer>
-                  <v-btn
-                    color="blue darken-1"
-                    text
-                    @click="dialog = false"
-                  >
-                    Close
-                  </v-btn>
-                  <v-btn
-                    color="blue darken-1"
-                    text
-                    @click="dialog = false"
-                  >
-                    Save
-                  </v-btn>
-                </v-card-actions>
               </v-card>
             </v-dialog>
           </v-row>
@@ -151,22 +178,46 @@
   
 </template>
 
+
+<style>
+  .caja{
+      font-weight: bold;
+      text-shadow: 1px 1px 4px rgba(0,0,0,0.7);
+  }
+</style>
+
 <script>
+  
   export default {
-    data: () => ({
-      date: null,
+    data: vm => ({
+      dialog: false,
+      date: new Date().toISOString().substr(0, 10),
+      dateFormatted: vm.formatDate(new Date().toISOString().substr(0, 10)),
       menu: false,
-       dialog: false,
     }),
-    watch: {
-      menu (val) {
-        val && setTimeout(() => (this.$refs.picker.activePicker = 'YEAR'))
+
+     watch: {
+      date () {
+        this.dateFormatted = this.formatDate(this.date)
       },
     },
+
     methods: {
-      save (date) {
-        this.$refs.menu.save(date)
+      formatDate (date) {
+        if (!date) return null
+
+        const [year, month, day] = date.split('-')
+        return `${month}/${day}/${year}`
+      },
+      parseDate (date) {
+        if (!date) return null
+
+        const [month, day, year] = date.split('/')
+        return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`
       },
     },
+
+
+
   }
 </script>

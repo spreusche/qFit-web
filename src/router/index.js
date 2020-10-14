@@ -4,8 +4,6 @@ import Explorar from '../components/Explorar'
 import MisRutinas from '../components/MisRutinas'
 import MisEjercicios from '../components/MisEjercicios'
 import Principal from '../components/Principal'
-import EditarPerfil from '../components/EditarPerfil'
-import Notificaciones from '../components/Notificaciones'
 
 Vue.use(VueRouter)
 
@@ -29,16 +27,6 @@ const routes = [
     path: '/MisEjercicios',
     name: 'MisEjercicios',
     component: MisEjercicios
-  },
-  {
-    path: '/EditarPerfil',
-    name: 'EditarPerfil',
-    component: EditarPerfil
-  },
-  {
-    path: '/Notificaciones',
-    name: 'Notificaciones',
-    component: Notificaciones
   }
 
 ]
