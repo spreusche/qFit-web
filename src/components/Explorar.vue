@@ -57,6 +57,7 @@
 
 
 <script>
+const axios = require('axios').default;
 export default {
      data: () => ({
       categories: ["Cat 1" ,"Cat 2", "Cat 3"],
@@ -72,7 +73,14 @@ export default {
     }),
     methods:{
         alerta: function(){
-            alert("Clickeaste una rutina");
+           axios.post('http://localhost:8080/api/user/login', {
+               username: "johndoe",
+               password: "1234567890"
+           })
+           .then(function(response){
+               console.log(response);
+           });
+            
         }
     }
 }

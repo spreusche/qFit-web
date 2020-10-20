@@ -1,7 +1,7 @@
 <template>
   <v-container fluid class="pa-0 ma-0" >
       
-    <v-toolbar color="#2D2D2A" dark>
+    <v-toolbar fixed color="#2D2D2A" dark>
       
       <img :src="require('../assets/logo-qfit.png')" height="100%" />
       <v-toolbar-title> 
