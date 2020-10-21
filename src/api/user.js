@@ -2,7 +2,19 @@ export { UserApi };
 
 class UserApi {
     static token = null;
-    static baseUrl = 'http://localhost:8080/api'
+    static baseUrl = 'http://localhost:8080/api';
+    static username = '';
+    static password = '';
+    static email = '';
+    static fullName = '';
+    static gender = '';
+    static birthdate = 0;
+    phone = '';
+    avatarUrl = '';
+
+    
+
+
 }
     // static get url() {
     //     return `${Api.baseUrl}/user`;

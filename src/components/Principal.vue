@@ -78,25 +78,9 @@
                                                 </v-btn>
                                               </v-row>
 
-                                              <v-row justify="center">
-                                                 <v-btn
-                                                  block
-                                                  elevation="2"
-                                                  color="#337CA0"
-                                                  dark
-                                                  to="/Explorar"
-                                                  class=" mb-4"
-                                                  @click="dialog = false"
-                                                >
-                                                <v-icon left>
-                                                  mdi-facebook
-                                                </v-icon>
-                                                  Ingresar con Facebook
-                                                </v-btn>
-
-                                              <!--Input registro usuario -->
-                                              </v-row>
                                               <v-divider class="mb-4"/>
+
+                                            <!--Input registro usuario -->
                                             <v-container v-show="!verification">  
                                               <v-row>
                                               <v-text-field
@@ -128,8 +112,10 @@
                                                   filled
                                                   rounded
                                                   dense
+                                                  required
                                                   :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
                                                   :type="show1 ? 'text' : 'password'"
+                                                  :rules="[rules.required, rules.min]"
                                                   name="input-10-1"
                                                   label="Contraseña *"
                                                   hint="Mínimo 8 caracteres"
@@ -242,7 +228,12 @@ export default {
           showMissingEmail: false,
           showMissingUsername: false,
           showMissingPass: false,
-          incorrectCode: false
+          incorrectCode: false,
+
+          rules: {
+          required: value => !!value || 'Obligatorio',
+          min: v => v.length >= 8 || 'Mínimo 8 caracteres',          
+          }
           
       }
     },

@@ -27,9 +27,6 @@
         ></v-text-field>
       </v-col>
 
-      <v-btn icon @click="getCurrent()" >
-        <v-icon>mdi-bell</v-icon>
-      </v-btn>
 
 <!--Account btn/dropdown -->
       <v-menu offset-y>
@@ -214,14 +211,6 @@ import { UserApi } from '../api/user'
       save(date) {
         this.$refs.menu.save(date)
       },
-  // "username": "johndoe",
-  // "password": "1234567890",
-  // "fullName": "John Doe",
-  // "gender": "male",
-  // "birthdate": 284007600000,
-  // "email": "johndoe@email.com",
-  // "phone": "98295822",
-  // "avatarUrl": "https://flic.kr/p/3ntH2u"
       getCurrent: function(){
         
           this.axios.get(UserApi.baseUrl + '/user/current').then(response => {
@@ -229,19 +218,7 @@ import { UserApi } from '../api/user'
             return response.data;
           }).catch(error => console.log(error));
       },
-      changeData: function(){
-        var current = this.getCurrent();
-        this.axios.put(UserApi.baseUrl + 'user/current', {
-          username: this.username,
-          password: current.password, //hay que ver como mantener el password
-          fullName: this.name + ' ' + this.lastName,
-          gender: current.gender,
-          birthdate: this.birthdate,
-          email: current.email,
-          phone: current.phone,
-          avatarUrl: current.avatarUrl
-        }).then(() => console.log("Cambios con exito")).catch(error => console.log(error.code));
-      }
+      
 
 
     }

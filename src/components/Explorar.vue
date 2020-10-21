@@ -27,10 +27,7 @@
 
         <hr>
 
-        <!-- <v-skeleton-loader
-          v-bind="attrs"
-          type="article"
-        ></v-skeleton-loader> -->
+
 
     <div class="ma-3" v-for="routine in routines" :key="routine">
         <v-card
@@ -41,12 +38,12 @@
         <v-card-title>{{ routine.name }}</v-card-title>       
         <v-card-subtitle>
           <v-icon>mdi-account</v-icon>
-          <span>{{ routine.trainer }}</span>
+          <span>{{ routine.creator.username }}</span>
           
         </v-card-subtitle>
         <v-card-text>
-            <h3>Duracion: </h3>20 min  FIJARSE PARA QUE QUEDE AL COSTADO
-            <h3>Descripcion: </h3> {{ routine.desc }} 
+            <h3>Duracion: </h3> - 
+            <h3>Descripcion: </h3> {{ routine.detail }} 
             <h3>Materiales:</h3> -
         </v-card-text>
         </v-card>
@@ -57,7 +54,7 @@
 
 
 <script>
-//import { UserApi } from '../api/user'
+import { UserApi } from '../api/user'
 //const axios = require('axios').default;
 //import router from '../router/index'
 export default {
@@ -65,16 +62,18 @@ export default {
         return{
             categories: ["Cat 1" ,"Cat 2", "Cat 3"],
             filters: ["Deporte", "Duracion", "Puntuacion"],
-            routines: [
-                     {name:"Rutina 1", trainer:"Entrenador Horacio", desc: "Ejemplo de como se verian las cards estas con la info de la API. Solo a modo de ejemplo. Luego ver como poner la informacion real"},
-                     {name:"Rutina 2", trainer:"Entrenador Tato", desc: "Ejemplo de como se verian las cards estas con la info de la API. Solo a modo de ejemplo. Luego ver como poner la informacion real"},
-                //     {name:"Rutina 3", trainer:"Entrenador Jose Luis", desc: "Ejemplo de como se verian las cards estas con la info de la API. Solo a modo de ejemplo. Luego ver como poner la informacion real"},
-                //     {name:"Rutina 4", trainer:"Entrenador Paco", desc: "Ejemplo de como se verian las cards estas con la info de la API. Solo a modo de ejemplo. Luego ver como poner la informacion real"},
-                //     {name:"Rutina 5", trainer:"Entrenadora Leticia ", desc: "Ejemplo de como se verian las cards estas con la info de la API. Solo a modo de ejemplo. Luego ver como poner la informacion real"}
-                
-                 ]
+            routines: []
+            
         }
-    }
+    },
+    beforeMount: function(){
+     this.axios.get(UserApi.baseUrl + '/routines/')
+       .then(response => {
+         console.log(response.data.results);
+         this.routines = response.data.results;
+         console.log(this.routines[0].creator.username);
+       }).catch(() => console.log("Error al obtener los datos"));
+   }
 }
 </script>
 
