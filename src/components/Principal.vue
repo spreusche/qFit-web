@@ -1,3 +1,4 @@
+
 <template>
    <div>
     <v-img contain src="../assets/principal.png">
@@ -138,7 +139,7 @@
                                                   rounded
                                                   class="caja"
                                                   to="/Explorar"
-                                                  @click="dialog = false"
+                                                  @click="[dialog = false, register()]"
                                                 >REGISTRARSE
                                               </v-btn>
                                               </v-row>
@@ -183,7 +184,10 @@
 </style>
 
 <script>
-
+//import func from '../../vue-temp/vue-editor-bridge'
+import { Api } from '../api/api.js';
+import { UserApi, Credentials } from '../api/user.js';
+import { SportApi, Sport } from '../api/sport.js';
 export default {
     data(){
       return{
@@ -191,6 +195,12 @@ export default {
           password : '',
           dialog: false
       }
+    },
+    methods:{
+      register: function(){
+        Api.get('http://localhost:8080/');
+      }
+    
     }
 }
 

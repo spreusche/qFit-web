@@ -1,12 +1,11 @@
 <template>
-  <v-container fluid class="pa-0 ma-0" >
-      
-    <v-toolbar fixed color="#2D2D2A" dark>
-      
-      <img :src="require('../assets/logo-qfit.png')" height="100%" />
-      <v-toolbar-title> 
-      </v-toolbar-title>
-      
+  <v-container fluid class="pa-0 ma-0">
+
+    <v-app-bar color="#2D2D2A" dark fixed app>
+
+
+      <img :src="require('../assets/logo-qfit.png')" height="100%" fixed alt=""/>
+
       <v-col>
         <v-tabs align-with-title background-color="#2D2D2A" grow slider-color="#00e140">
           <v-tab to="/MisRutinas">Mis Rutinas</v-tab>
@@ -54,7 +53,7 @@
                 </v-list-item>
               </template>
               <v-card>
-                 <v-toolbar
+                 <v-app-bar
                     flat
                     dark
                     color="#2d2d2a"
@@ -66,11 +65,8 @@
                     >
                       <v-icon>mdi-close</v-icon>
                     </v-btn>
-                    <v-toolbar-title>
-                      <h2>Editar Perfil</h2>
-                    </v-toolbar-title>
                     <v-spacer></v-spacer>
-                    
+
                       <v-btn
                         color="#00e140"
                         dark
@@ -79,9 +75,9 @@
                       >
                         GUARDAR
                       </v-btn>
-                    
-                  </v-toolbar>
-              
+
+                  </v-app-bar>
+
                 <v-card-text>
                   <v-container>
                     <v-row>
@@ -103,7 +99,7 @@
                             ></v-text-field>
                           </v-col>
                         </v-row>
-                          
+
                           <v-row>
                             <v-col>
                               <v-text-field
@@ -175,12 +171,12 @@
     </v-menu>
 
 
-    </v-toolbar>
+    </v-app-bar>
 
-  
+
   </v-container>
-   
-  
+
+
 </template>
 
 
@@ -192,7 +188,7 @@
 </style>
 
 <script>
-  
+
   export default {
     data: () => ({
       dialog: false,
@@ -205,7 +201,7 @@
         val && setTimeout(() => (this.$refs.picker.activePicker = 'YEAR'))
       },
     },
-    
+
     methods: {
       save(date) {
         this.$refs.menu.save(date)
