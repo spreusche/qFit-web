@@ -1,45 +1,5 @@
+
 <template>
-  <v-container fluid class="pa-0 ma-0">
-
-    <v-app-bar color="#2D2D2A" dark fixed app>
-
-
-      <img :src="require('../assets/logo-qfit.png')" height="100%" fixed alt=""/>
-
-      <v-col>
-        <v-tabs align-with-title background-color="#2D2D2A" grow slider-color="#00e140">
-          <v-tab to="/MisRutinas">Mis Rutinas</v-tab>
-          <v-tab to="/MisEjercicios">Mis Ejercicios</v-tab>
-          <v-tab to="/Explorar">Explorar</v-tab>
-        </v-tabs>
-      </v-col>
-
-<!--Search Bar -->
-      <v-col>
-        <v-text-field
-        append-icon="mdi-magnify"
-        flat
-        dense
-        hide-details
-        rounded
-        label="Buscar"
-        solo-inverted
-        ></v-text-field>
-      </v-col>
-
-      <v-btn icon @click="getCurrent()" >
-        <v-icon>mdi-bell</v-icon>
-      </v-btn>
-
-<!--Account btn/dropdown -->
-      <v-menu offset-y>
-        <template v-slot:activator="{ on, attrs }">
-          <v-btn icon v-bind="attrs" v-on="on">
-            <v-icon>mdi-account-circle</v-icon>
-          </v-btn>
-        </template>
-      <v-list>
-        <template>
           <v-row justify="center">
             <v-dialog
               v-model="dialog"
@@ -71,7 +31,7 @@
                         color="#00e140"
                         dark
                         class="caja"
-                        @click="[changeData(), dialog = false]"
+                        @click="dialog = false"
                       >
                         GUARDAR
                       </v-btn>
@@ -88,7 +48,6 @@
                               label="Nombre"
                               required
                               filled
-                              v-model="name"
                             ></v-text-field>
                           </v-col>
                           <v-col>
@@ -97,7 +56,6 @@
                               persistent-hint
                               required
                               filled
-                              v-model="lastName"
                             ></v-text-field>
                           </v-col>
                         </v-row>
@@ -108,7 +66,6 @@
                                 label="Usuario"
                                 required
                                 filled
-                                v-model="username"
                               ></v-text-field>
                             </v-col>
                             <v-col>
@@ -161,90 +118,11 @@
               </v-card>
             </v-dialog>
           </v-row>
-        </template>
-
-
-        <v-list-item>
-          <v-list-item-title>Configuración</v-list-item-title>
-        </v-list-item>
-        <v-list-item to='/'>
-          <v-list-item-title>Cerrar Sesión</v-list-item-title>
-        </v-list-item>
-      </v-list>
-    </v-menu>
-
-
-    </v-app-bar>
-
-
-  </v-container>
-
-
 </template>
-
-
-<style>
-  .caja{
-      font-weight: bold;
-      text-shadow: 1px 1px 4px rgba(0,0,0,0.7);
-  }
-</style>
-
 <script>
-import { UserApi } from '../api/user'
-  export default {
-    data: () => ({
-      dialog: false,
-      date: null,
-      menu: false,
-      name: '',
-      lastName: '',
-      username: '',
-      birthdate: '',
-
-    }),
-
-    watch: {
-      menu (val) {
-        val && setTimeout(() => (this.$refs.picker.activePicker = 'YEAR'))
-      },
-    },
-
-    methods: {
-      save(date) {
-        this.$refs.menu.save(date)
-      },
-  // "username": "johndoe",
-  // "password": "1234567890",
-  // "fullName": "John Doe",
-  // "gender": "male",
-  // "birthdate": 284007600000,
-  // "email": "johndoe@email.com",
-  // "phone": "98295822",
-  // "avatarUrl": "https://flic.kr/p/3ntH2u"
-      getCurrent: function(){
-        
-          this.axios.get(UserApi.baseUrl + '/user/current').then(response => {
-            console.log(response.data);
-            return response.data;
-          }).catch(error => console.log(error));
-      },
-      changeData: function(){
-        var current = this.getCurrent();
-        this.axios.put(UserApi.baseUrl + 'user/current', {
-          username: this.username,
-          password: current.password, //hay que ver como mantener el password
-          fullName: this.name + ' ' + this.lastName,
-          gender: current.gender,
-          birthdate: this.birthdate,
-          email: current.email,
-          phone: current.phone,
-          avatarUrl: current.avatarUrl
-        }).then(() => console.log("Cambios con exito")).catch(error => console.log(error.code));
-      }
-
+export default {
+    data: () =>{
 
     }
-
-  }
+}
 </script>

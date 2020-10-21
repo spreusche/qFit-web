@@ -224,6 +224,7 @@
 //import { UserApi, Credentials } from '../api/user.js';
 //import { SportApi, Sport } from '../api/sport.js';
 import router from '../router/index'
+import { UserApi } from '../api/user'
 export default {
     data(){
       return{
@@ -237,7 +238,7 @@ export default {
           passReg: '',
           verification: false,
           verificationInput: '',
-          baseUrl: 'http://localhost:8080/api/',
+         
           showMissingEmail: false,
           showMissingUsername: false,
           showMissingPass: false,
@@ -247,30 +248,37 @@ export default {
     },
     methods:{
       logIn: function(){
-        this.axios.post(this.baseUrl + 'user/login', {username: this.username, password: this.password})
+        this.axios.post(UserApi.baseUrl + '/user/login', {username: this.username, password: this.password})
         .then(response => {
-          this.token = response.data.token;
-          router.go(1);
-         // router.push({name:'Explorar'});
-          }).then(() => console.log(this.token)).catch(error => console.log(error.code));
+          UserApi.token = response.data.token;
+          console.log('entramos');
+          this.axios.defaults.headers.common['Authorization'] = `bearer ${UserApi.token}`;
+         // router.go(1);
+          router.push({name:'Explorar'});
+          }).catch(error => {
+            console.log(error);
+            if(error.code === 401){
+              console.log("HOLAAAAAAa");
+            }
+            });
       },
       register: function(){
         
         var cont = 1;
         
-        if(this.usernameReg == '' ){
+        if(this.usernameReg === '' ){
           this.showMissingUsername = true;
           console.log("user vacio");
           cont = 0;
         }
 
-        if(this.passReg == '' || this.passReg.length < 8 ){
+        if(this.passReg === '' || this.passReg.length < 8 ){
           this.showMissingPass = true;
           console.log("pass vacio o inc");
           cont = 0;
         }
 
-        if(this.emailReg == ''){
+        if(this.emailReg === ''){
           this.showMissingEmail = true;
           console.log("email vacio");
           cont = 0;
@@ -278,7 +286,7 @@ export default {
      //los campos restantes se llenan con "basura", luego dentro de la Web algunos campos podrian modificarse
      //y otros no, de todas formas, si no se utilizan no cambia
       if(cont){
-        this.axios.post(this.baseUrl + 'user', {
+        this.axios.post(UserApi.baseUrl + '/user', {
           username: this.usernameReg,
           password: this.passReg,
           fullName: "j d",
@@ -298,7 +306,7 @@ export default {
       }
     },
     verifyCode: function(){
-      this.axios.post(this.baseUrl + 'user/verify_email',{
+      this.axios.post(UserApi.baseUrl + '/user/verify_email',{
         email: this.emailReg,
         code: this.verificationInput
       }).then(() => {

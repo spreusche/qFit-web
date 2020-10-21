@@ -57,20 +57,24 @@
 
 
 <script>
+//import { UserApi } from '../api/user'
 //const axios = require('axios').default;
+//import router from '../router/index'
 export default {
-     data: () => ({
-      categories: ["Cat 1" ,"Cat 2", "Cat 3"],
-      filters: ["Deporte", "Duracion", "Puntuacion"],
-      routines: [
+    data(){
+        return{
+            categories: ["Cat 1" ,"Cat 2", "Cat 3"],
+            filters: ["Deporte", "Duracion", "Puntuacion"],
+            routines: [
                      {name:"Rutina 1", trainer:"Entrenador Horacio", desc: "Ejemplo de como se verian las cards estas con la info de la API. Solo a modo de ejemplo. Luego ver como poner la informacion real"},
-                //     {name:"Rutina 2", trainer:"Entrenador Tato", desc: "Ejemplo de como se verian las cards estas con la info de la API. Solo a modo de ejemplo. Luego ver como poner la informacion real"},
+                     {name:"Rutina 2", trainer:"Entrenador Tato", desc: "Ejemplo de como se verian las cards estas con la info de la API. Solo a modo de ejemplo. Luego ver como poner la informacion real"},
                 //     {name:"Rutina 3", trainer:"Entrenador Jose Luis", desc: "Ejemplo de como se verian las cards estas con la info de la API. Solo a modo de ejemplo. Luego ver como poner la informacion real"},
                 //     {name:"Rutina 4", trainer:"Entrenador Paco", desc: "Ejemplo de como se verian las cards estas con la info de la API. Solo a modo de ejemplo. Luego ver como poner la informacion real"},
                 //     {name:"Rutina 5", trainer:"Entrenadora Leticia ", desc: "Ejemplo de como se verian las cards estas con la info de la API. Solo a modo de ejemplo. Luego ver como poner la informacion real"}
                 
                  ]
-     })
+        }
+    }
 }
 </script>
 
