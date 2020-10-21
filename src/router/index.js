@@ -43,15 +43,15 @@ const router = new VueRouter({
 // router.beforeEach((to, from, next) => {
 //   // lo que hace esta constante booleana es preguntar si cada
 //   // ruta requiere autenticacion
-//   const routeAuth = to.matched.some(record => record.meta.requiresAuth);
+ //  const routeAuth = to.matched.some(record => record.meta.requiresAuth);
 //   // para ver si el usuario hizo el login
 //   const token = from.token;
 //   //console.log(token + "HOLAAAAAAAA");
-//   if(routeAuth && token == null){
-//     next({name:'Principal'});
+ //  if(routeAuth && token == null){
+ //    next({name:'Principal'});
 //   } else {
 //     next();
 //   }
-// });
+ //});
 
 export default router

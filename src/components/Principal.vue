@@ -93,12 +93,15 @@
                                                 </v-icon>
                                                   Ingresar con Facebook
                                                 </v-btn>
-                                              
+
+                                              <!--Input registro usuario -->
                                               </v-row>
                                               <v-divider class="mb-4"/>
+                                            <v-container v-show="!verification">  
                                               <v-row>
                                               <v-text-field
                                                 label="Usuario *"
+                                                v-model="usernameReg"
                                                 required
                                                 filled
                                                 rounded
@@ -106,9 +109,11 @@
                                               ></v-text-field>
                                               </v-row>
 
+                                            <!--Input registro email -->
                                               <v-row>
                                                 <v-text-field
                                                   label="Email *"
+                                                  v-model="emailReg"
                                                   required
                                                   filled
                                                   rounded
@@ -116,9 +121,10 @@
                                                 ></v-text-field>
                                               </v-row>
 
+                                            <!--Input registro contrasena -->
                                               <v-row>
                                                 <v-text-field
-                                                  v-model="password"
+                                                  v-model="passReg"
                                                   filled
                                                   rounded
                                                   dense
@@ -139,12 +145,39 @@
                                                   dark
                                                   rounded
                                                   class="caja"
-                                                  to="/Explorar"
-                                                  @click="[dialog = false, register()]"
+                                                  @click="register()"
                                                 >REGISTRARSE
                                               </v-btn>
                                               </v-row>
-                                             
+
+                                              </v-container>
+
+                                              <!--Input registro verificacion -->
+                                              <v-container v-show="verification">
+                                                <v-row>
+                                                  <v-text-field
+                                                    v-model="verificationInput"
+                                                    filled
+                                                    rounded
+                                                    dense
+                                                    label="Código de Verificación "
+                                                    hint="Revise su casilla de correo"
+                                                    @click:append="show1 = !show1"
+                                                  ></v-text-field>
+                                                </v-row>
+                                                <v-row>
+                                                  <v-btn
+                                                      block
+                                                      elevation="2"
+                                                      color="#00E140"
+                                                      dark
+                                                      rounded
+                                                      class="caja"
+                                                      @click="verifyCode()"
+                                                      >VERIFICAR CÓDIGO
+                                                    </v-btn>  
+                                                </v-row>
+                                             </v-container>
                                             </v-col>
                                             
                                           </v-row>
@@ -199,19 +232,87 @@ export default {
           username: '',
           password : '',
           token: '',
+          usernameReg: '',
+          emailReg: '',
+          passReg: '',
+          verification: false,
+          verificationInput: '',
+          baseUrl: 'http://localhost:8080/api/',
+          showMissingEmail: false,
+          showMissingUsername: false,
+          showMissingPass: false,
+          incorrectCode: false
           
       }
     },
     methods:{
       logIn: function(){
-        this.axios.post('http://localhost:8080/api/user/login', {username: this.username, password: this.password})
+        this.axios.post(this.baseUrl + 'user/login', {username: this.username, password: this.password})
         .then(response => {
           this.token = response.data.token;
+          router.go(1);
          // router.push({name:'Explorar'});
           }).then(() => console.log(this.token)).catch(error => console.log(error.code));
+      },
+      register: function(){
+        
+        var cont = 1;
+        
+        if(this.usernameReg == '' ){
+          this.showMissingUsername = true;
+          console.log("user vacio");
+          cont = 0;
+        }
+
+        if(this.passReg == '' || this.passReg.length < 8 ){
+          this.showMissingPass = true;
+          console.log("pass vacio o inc");
+          cont = 0;
+        }
+
+        if(this.emailReg == ''){
+          this.showMissingEmail = true;
+          console.log("email vacio");
+          cont = 0;
+        }
+     //los campos restantes se llenan con "basura", luego dentro de la Web algunos campos podrian modificarse
+     //y otros no, de todas formas, si no se utilizan no cambia
+      if(cont){
+        this.axios.post(this.baseUrl + 'user', {
+          username: this.usernameReg,
+          password: this.passReg,
+          fullName: "j d",
+          gender: "male",
+          birthdate: 0,
+          email: this.emailReg,
+          phone: "0000-0000",
+          avatarUrl: " "
+        }).then(() =>{
+          this.showMissingUsername = false;
+          this.showMissingPass = false;
+          this.showMissingEmail = false;
+          this.verification = true;
+          
+        })
+        .catch(error => console.log(error.detail));
       }
-    
+    },
+    verifyCode: function(){
+      this.axios.post(this.baseUrl + 'user/verify_email',{
+        email: this.emailReg,
+        code: this.verificationInput
+      }).then(() => {
+        this.username = this.usernameReg;
+        this.password = this.passReg;
+        this.logIn();
+      }).catch(error => {
+        console.log(error.detail);
+        this.incorrectCode = true;
+
+        });
     }
+    
+  }
 }
 
 </script>
