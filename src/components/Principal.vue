@@ -17,6 +17,7 @@
                                     background-color="white"
                                     rounded
                                     dense
+                                    v-model="username"
                                     
                                 ></v-text-field>
                             </v-row>
@@ -159,7 +160,8 @@
                                     dark
                                     rounded
                                     class="caja"
-                                    to="/Explorar"
+                                    @click="logIn()"
+
                                   >INICIAR SESIÓN</v-btn>
                                 </v-row>
                               </template>
@@ -185,20 +187,28 @@
 
 <script>
 //import func from '../../vue-temp/vue-editor-bridge'
-import { Api } from '../api/api.js';
-import { UserApi, Credentials } from '../api/user.js';
-import { SportApi, Sport } from '../api/sport.js';
+//import { Api } from '../api/api.js';
+//import { UserApi, Credentials } from '../api/user.js';
+//import { SportApi, Sport } from '../api/sport.js';
+import router from '../router/index'
 export default {
     data(){
       return{
           show1 :false,
+          dialog: false,
+          username: '',
           password : '',
-          dialog: false
+          token: '',
+          
       }
     },
     methods:{
-      register: function(){
-        Api.get('http://localhost:8080/');
+      logIn: function(){
+        this.axios.post('http://localhost:8080/api/user/login', {username: this.username, password: this.password})
+        .then(response => {
+          this.token = response.data.token;
+         // router.push({name:'Explorar'});
+          }).then(() => console.log(this.token)).catch(error => console.log(error.code));
       }
     
     }

@@ -16,7 +16,9 @@ const routes = [
   {
     path: '/Explorar',
     name: 'Explorar',
-    component: Explorar
+    component: Explorar//,
+   // meta: {requiresAuth:true}
+    
   },
   {
     path: '/MisRutinas',
@@ -36,5 +38,20 @@ const router = new VueRouter({
   base: process.env.BASE_URL,
   routes
 })
+
+// // Para lo de navegacion segura
+// router.beforeEach((to, from, next) => {
+//   // lo que hace esta constante booleana es preguntar si cada
+//   // ruta requiere autenticacion
+//   const routeAuth = to.matched.some(record => record.meta.requiresAuth);
+//   // para ver si el usuario hizo el login
+//   const token = from.token;
+//   //console.log(token + "HOLAAAAAAAA");
+//   if(routeAuth && token == null){
+//     next({name:'Principal'});
+//   } else {
+//     next();
+//   }
+// });
 
 export default router
