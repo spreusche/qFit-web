@@ -10,19 +10,6 @@
           <v-btn color="green" text outlined to="/CrearRutina">
             + Crear Ejercicio
           </v-btn>
-
-          <v-chip-group
-              active-class="green accent-4 white--text"
-              column
-          >
-            <v-chip  @click="update"
-                     class="short"
-            >cargar fotos</v-chip>
-          </v-chip-group>
-
-          <v-btn color="green" text outlined @click="update">
-            cargar fotos
-          </v-btn>
         </v-col>
       </v-row>
 
@@ -108,10 +95,12 @@ export default {
           this.masterCycle = response.data.results;
           console.log(this.masterCycle);
           console.log("BUENARDO");
+
+          this.timeout = setTimeout(() => {
+            this.update();
+          }, 350)
+
         })
-        .then(() => {
-      this.update();
-    })
         .catch(() => console.log("errorciño agarrando los datos de la api"));
   },
 
