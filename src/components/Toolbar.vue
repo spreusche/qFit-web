@@ -152,9 +152,6 @@
             </v-row>
           </template>
 
-          <v-list-item>
-            <v-list-item-title>Configuración</v-list-item-title>
-          </v-list-item>
           <v-list-item to="/">
             <v-list-item-title>Cerrar Sesión</v-list-item-title>
           </v-list-item>

@@ -9,10 +9,17 @@ class UserApi {
     static fullName = '';
     static gender = '';
     static birthdate = 0;
+    currID = null;
     phone = '';
     avatarUrl = '';
 
-    
+    static currID(id) {
+        if(id != null){
+            this.currID=id;
+        } else {
+        return this.currID;
+        }
+    }
 
 
 }

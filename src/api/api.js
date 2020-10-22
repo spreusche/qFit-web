@@ -8,6 +8,7 @@ class Api {
     return 'http://127.0.0.1:8080/api';
   }
 
+
   static get timeout() {
     return 60 * 1000;
   }
@@ -51,11 +52,11 @@ class Api {
     });
   }
 
-  
+
 
   static async post(url, data) {
     return await axios.post(url, JSON.stringify(data));
-    
+
   }
 
   static async put(url, data) {

@@ -91,29 +91,30 @@ export default {
   data: () => ({
     categories: ["Cat 1", "Cat 2", "Cat 3"],
     filters: ["Deporte", "Duracion", "Puntuacion"],
-    routines: [
-      {
-        name: "Rutina de Brazos",
-        source: "https://fondosmil.com/fondo/4045.jpg",
-        content: "10 flexiones de brazo",
-        duracion: "1 hora",
-        detail: "Te dejará los brazos mas explosivos de todo el barrio",
-        text: "felxiones de brazos: 10 reps",
-        show: false,
-      },
-      {
-        name: "Rutina 2",
-        source:
-          "https://c.wallhere.com/photos/14/73/women_sportswear_ass_gloves_gyms_mirror_dumbbells_tanned-1158628.jpg!d",
-        content: "cont 2",
-        duracion: "2 horas",
-        detail: "detail 2",
-        text: "texto 2",
-        show: false,
-      },
-      // rutina 3 va a ser agarrada de la nube:
-      {},
-    ],
+    routines: [],
+    //     [
+    //   {
+    //     name: "Rutina de Brazos",
+    //     source: "https://fondosmil.com/fondo/4045.jpg",
+    //     content: "10 flexiones de brazo",
+    //     duracion: "1 hora",
+    //     detail: "Te dejará los brazos mas explosivos de todo el barrio",
+    //     text: "felxiones de brazos: 10 reps",
+    //     show: false,
+    //   },
+    //   {
+    //     name: "Rutina 2",
+    //     source:
+    //       "https://c.wallhere.com/photos/14/73/women_sportswear_ass_gloves_gyms_mirror_dumbbells_tanned-1158628.jpg!d",
+    //     content: "cont 2",
+    //     duracion: "2 horas",
+    //     detail: "detail 2",
+    //     text: "texto 2",
+    //     show: false,
+    //   },
+    //   // rutina 3 va a ser agarrada de la nube:
+    //   {},
+    // ],
   }), //cuando se entra a la pagina se hace esto :D Y ME FUNKA BIEN
   beforeMount: function () {
     this.axios

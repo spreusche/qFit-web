@@ -7,11 +7,11 @@ class RoutineApi {
         return `${Api.baseUrl}/routines`;
     }
 
-    static async add(routine, controller) {
+    static async post(routine, controller) {
         return await Api.post(RoutineApi.url, true, routine, controller);
     }
 
-    static async modify(routine, controller) {
+    static async put(routine, controller) {
         return await Api.put(`${RoutineApi.url}/${routine.id}`, true, routine, controller);
     }
 

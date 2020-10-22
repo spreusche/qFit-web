@@ -22,9 +22,10 @@
 
     <hr/>
 
-
+<div v-if="routinesE && routinesE.length > 0">
     <div class="ma-3" v-for="(routine, index) in routinesE" :key="index">
-      <v-card elevation="4" outlined @click="routineDialog[index] = true">
+      <!-- cuando clickeo, tengo que llamar a los getters(routine.id) y luego cuando estoy dentro del dialogo, haer v-if cycles y eso tan vacios o no... -->
+      <v-card elevation="4" outlined @click="saveIndex(index)">
         <v-card-title>{{ routine.name }}</v-card-title>
         <v-card-subtitle>
           <v-icon>mdi-account</v-icon>
@@ -42,47 +43,36 @@
           <p>{{ routine.difficulty }}</p>
         </v-card-text>
       </v-card>
-    
-    <v-dialog v-model="routineDialog[index]" width="600px">
-            <template v-slot:activator="{ on, attrs }">
-            <v-btn color="#00e140" dark v-bind="attrs" v-on="on">
-                Más Información
-            </v-btn>
-            </template>
-            <v-card>
-            <v-app-bar flat dark color="#2d2d2a"> </v-app-bar>
-            <v-card-title>
-                <span class="headline">{{ routine.name }}</span> 
-            </v-card-title>
-            <v-card-subtitle>
-            Creado por {{ routine.creator.username }} 
-            </v-card-subtitle>
-
-            <v-card-text>
-               {{ routine.detail }}
-            </v-card-text>
-            </v-card>
-        </v-dialog>
     </div>
-    
-<!-- 
-@click="[routineDialog[index]=true , cc()]"
+</div>
+<div v-else>
+  Parece que hay rutinas aun.
+</div>
 
-<template v-for="(r, i) in routinesE">
-        <v-dialog v-model="routineDialog[i]" width="600px" :key="r.id">
-            <v-card elevation="0">
-            <v-app-bar flat dark color="#2d2d2a"> </v-app-bar>
-            <v-card-title>
-                <span class="headline">{{ routinesE[i].name }}</span>
-            </v-card-title>
+     <v-dialog  v-model="routineDialog" @click:outside="routineDialog = !routineDialog" width="600px">
+        <div v-if="routinesE && routinesE.length > 0">
+                    <v-card>
+                      <v-app-bar flat dark color="#2d2d2a"> 
+                        <v-toolbar-title> <h1>{{ routinesE[this.index].name }} </h1> </v-toolbar-title>
+                      </v-app-bar>
+                      
+                      <v-card-title>
+                          <v-icon>mdi-account</v-icon>
+                          Creado por {{ routinesE[index].creator.username }}
+                      </v-card-title>
+                      <v-card-subtitle>
+                        Descripción:
+                      </v-card-subtitle>
+                        <v-card-text>
+                          {{ routinesE[index].detail }} 
+                                
+                                    
+                        </v-card-text>   
+                    </v-card>
+        </div>
+      </v-dialog> 
 
-            <v-card-text>
-                Lorem ipsum dolor sit amet, semper quis, sapien id natoque elit.
-                Nostra urna at, magna at neque sed sed ante imperdiet, lorem
-            </v-card-text>
-            </v-card>
-        </v-dialog>
-</template> -->
+  
     
 
     
@@ -100,13 +90,13 @@ export default {
       categories: ["Cat 1", "Cat 2", "Cat 3"],
       filters: ["Deporte", "Duracion", "Puntuacion"],
       routinesE: [],
-      routineDialog: [],
-      wanted: Number,
-      i: Number
+      routineDialog: false,
+      index: 0,
+      exercises: [],
+      cycles: []
     };
   },
-  beforeCreate: function () {
-console.log("DSADASD");
+  created: function () {
         this.axios
         .get(UserApi.baseUrl + "/routines/")
         .then((response) => {
@@ -124,12 +114,24 @@ console.log("DSADASD");
        
     },
     methods:{
-    cc: function(){
-             console.log(this.routineDialog[0]);
-        }
+      saveIndex: function(index){
+              this.routineDialog = !this.routineDialog
+              this.index = index;
+              console.log("HOLAAAAAAA");
+              console.log(this.routinesE);
+              console.log(this.index);        
+      },
+      getRoutineCycles(id){
+        this.axios.get(UserApi.baseUrl + "/routines/" + id + "/cycles")
+        .then(response => {
+          this.cycles = response.data.results;
+        }).catch(error => {
+          console.log(error.description);
+          
+        })
+      }
 
     }
    
 }
 </script>
-
