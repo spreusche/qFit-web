@@ -4,6 +4,7 @@ import Explorar from '../components/Explorar'
 import MisRutinas from '../components/MisRutinas'
 import MisEjercicios from '../components/MisEjercicios'
 import Principal from '../components/Principal'
+import CrearRutina from '../components/CrearRutina'
 
 import { UserApi } from '../api/user'
 
@@ -29,13 +30,19 @@ const routes = [
    // meta: {requiresAuth:true}
   },
   {
+    path: '/CrearRutina',
+    name: 'CrearRutina',
+    component: CrearRutina,
+   // meta: {requiresAuth:true}
+  },
+  {
     path: '/MisEjercicios',
     name: 'MisEjercicios',
     component: MisEjercicios,
    // meta: {requiresAuth:true}
   }
-
 ]
+
 
 const router = new VueRouter({
   mode: 'history',
@@ -50,7 +57,7 @@ const router = new VueRouter({
    const routeAuth = to.matched.some(record => record.meta.requiresAuth);
 //   // para ver si el usuario hizo el login
    const token = UserApi.token;
-//   //console.log(token + "HOLAAAAAAAA");
+//   
    if(routeAuth && token == null){
      next({name:'Principal'});
    } else {
