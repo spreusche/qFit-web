@@ -87,7 +87,7 @@ export default {
     masterCycle: [],
     imgs: [],
   }),
-  //cuando se entra a la pagina se hace esto :D Y ME FUNKA BIEN
+  //cuando se entra a la pagina se hace esto :D
   beforeMount: function () {
     this.axios
         .get(UserApi.baseUrl + "/routines/1/cycles/1/exercises")
@@ -108,13 +108,13 @@ export default {
     logg: function (text) {
       console.log(text);
     },
-    update: function () {
+    update: function () { //esto se tiene que correr una vez despues de que se carga la pagina para que carguen las imagenes
       this.axios
           .get(UserApi.baseUrl + "/routines/1/cycles/1/exercises")
           .then((response) => {
             this.masterCycle = response.data.results;
             console.log(this.masterCycle);
-            console.log("BUENARDO");
+            console.log("BUENARDO2");
           })
           .catch(() => console.log("errorciño agarrando los datos de la api"));
     },
@@ -124,8 +124,6 @@ export default {
       this.axios
           .get(UserApi.baseUrl + "/routines/1/cycles/1/exercises/" + id + "/images")
           .then((response) => {
-            console.log(this.imgs);
-            console.log(response.data.results[0].url);
             this.imgs[id-1]=response.data.results[0].url;
             console.log(this.imgs);
           })

@@ -5,7 +5,7 @@ import MisRutinas from '../components/MisRutinas'
 import MisEjercicios from '../components/MisEjercicios'
 import Principal from '../components/Principal'
 import CrearRutina from '../components/CrearRutina'
-
+import TablaEjercicios from '../components/TablaEjercicios'
 import { UserApi } from '../api/user'
 
 Vue.use(VueRouter)
@@ -40,6 +40,12 @@ const routes = [
     name: 'MisEjercicios',
     component: MisEjercicios,
    // meta: {requiresAuth:true}
+  },
+  {
+    path: '/CrearRutina/Ejercicios',
+    name: 'Ejercicios',
+    component: TablaEjercicios,
+    // meta: {requiresAuth:true}
   }
 ]
 
