@@ -22,8 +22,8 @@
 
     <hr />
 
-    <div class="ma-3" v-for="routine in routines" :key="routine.id">
-      <v-card elevation="4" outlined>
+    <div class="ma-3" v-for="(routine, index) in routinesE" :key="index">
+      <v-card elevation="4" outlined @click="routineDialog = true">
         <v-card-title>{{ routine.name }}</v-card-title>
         <v-card-subtitle>
           <v-icon>mdi-account</v-icon>
@@ -41,26 +41,23 @@
           <p>{{ routine.difficulty }}</p>
         </v-card-text>
       </v-card>
+    </div>
 
-      <v-dialog v-model="dialog" width="600px">
-        <template v-slot:activator="{ on, attrs }">
-          <v-btn color="primary" dark v-bind="attrs" v-on="on">
-            Open Dialog
-          </v-btn>
-        </template>
-        <v-card>
+    <template>
+      <v-dialog v-model="routineDialog" width="600px">
+        <v-card elevation="0">
           <v-app-bar flat dark color="#2d2d2a"> </v-app-bar>
           <v-card-title>
-            <span class="headline">{{ routine.name }}</span>
+            <span class="headline">{{ routinesE[0].name }}</span>
           </v-card-title>
 
           <v-card-text>
             Lorem ipsum dolor sit amet, semper quis, sapien id natoque elit.
-            Nostra urna at, magna at neque sed sed ante imperdiet,
+            Nostra urna at, magna at neque sed sed ante imperdiet, lorem
           </v-card-text>
         </v-card>
       </v-dialog>
-    </div>
+    </template>
   </v-container>
 </template>
 
@@ -74,7 +71,9 @@ export default {
     return {
       categories: ["Cat 1", "Cat 2", "Cat 3"],
       filters: ["Deporte", "Duracion", "Puntuacion"],
-      routines: [],
+      routinesE: [],
+      routineDialog: false,
+      wanted: Number
     };
   },
   beforeMount: function () {
@@ -82,11 +81,11 @@ export default {
       .get(UserApi.baseUrl + "/routines/")
       .then((response) => {
         console.log(response.data.results);
-        this.routines = response.data.results;
-        console.log(this.routines[0].creator.username);
+        this.routinesE = response.data.results;
+        console.log(this.routinesE[0].creator.username);
       })
-      .catch(() => console.log("Error al obtener los datos"));
-  },
+      .catch(() => console.log("Error al obtener los datos de rutinas"));
+  }
 };
 </script>
 

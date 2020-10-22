@@ -17,25 +17,33 @@
 
     <div class="ma-3" v-for="routine in routines" :key="routine">
       <v-card elevation="4" max-width="1114">
-        <v-card-title>{{ routine.name }}</v-card-title>
+        <v-row>
+          <v-col>
+            <v-card-title class="pt-1">{{ routine.name }}</v-card-title>
 
-        <v-card-subtitle>
-          {{ routine.detail }}
-        </v-card-subtitle>
+            <v-card-subtitle>
+              {{ routine.detail }}
+            </v-card-subtitle>
+          </v-col>
+          <v-col>
+            <v-card-actions class="pt-0">
+              <v-spacer></v-spacer>
+              <v-btn icon v-bind="attrs" color="blue" @click="update">
+                <v-icon>mdi-share</v-icon>
+              </v-btn>
+
+              <v-btn icon v-bind="attrs">
+                <v-icon>mdi-pencil</v-icon>
+              </v-btn>
+
+              <v-btn icon v-bind="attrs" color="red">
+                <v-icon>mdi-delete</v-icon>
+              </v-btn>
+            </v-card-actions>
+          </v-col>
+        </v-row>
 
         <v-card-actions>
-          <v-btn icon v-bind="attrs" color="blue" @click="update">
-            <v-icon>mdi-share</v-icon>
-          </v-btn>
-
-          <v-btn icon v-bind="attrs">
-            <v-icon>mdi-pencil</v-icon>
-          </v-btn>
-
-          <v-btn icon v-bind="attrs" color="red">
-            <v-icon>mdi-delete</v-icon>
-          </v-btn>
-
           <v-spacer></v-spacer>
 
           <v-btn icon @click="routine.isPublic = !routine.isPublic">
@@ -44,7 +52,6 @@
             }}</v-icon>
           </v-btn>
         </v-card-actions>
-
         <v-expand-transition>
           <div v-show="!routine.isPublic">
             <v-divider></v-divider>
@@ -78,9 +85,7 @@
 
 
 
-
 <script>
-//const axios = require('axios').default;
 import { UserApi } from "../api/user";
 export default {
   data: () => ({
