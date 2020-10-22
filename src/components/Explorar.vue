@@ -20,10 +20,11 @@
       </v-col>
     </v-row>
 
-    <hr />
+    <hr/>
+
 
     <div class="ma-3" v-for="(routine, index) in routinesE" :key="index">
-      <v-card elevation="4" outlined @click="routineDialog = true">
+      <v-card elevation="4" outlined @click="routineDialog[index] = true">
         <v-card-title>{{ routine.name }}</v-card-title>
         <v-card-subtitle>
           <v-icon>mdi-account</v-icon>
@@ -41,23 +42,50 @@
           <p>{{ routine.difficulty }}</p>
         </v-card-text>
       </v-card>
+    
+    <v-dialog v-model="routineDialog[index]" width="600px">
+            <template v-slot:activator="{ on, attrs }">
+            <v-btn color="#00e140" dark v-bind="attrs" v-on="on">
+                Más Información
+            </v-btn>
+            </template>
+            <v-card>
+            <v-app-bar flat dark color="#2d2d2a"> </v-app-bar>
+            <v-card-title>
+                <span class="headline">{{ routine.name }}</span> 
+            </v-card-title>
+            <v-card-subtitle>
+            Creado por {{ routine.creator.username }} 
+            </v-card-subtitle>
+
+            <v-card-text>
+               {{ routine.detail }}
+            </v-card-text>
+            </v-card>
+        </v-dialog>
     </div>
+    
+<!-- 
+@click="[routineDialog[index]=true , cc()]"
 
-    <template>
-      <v-dialog v-model="routineDialog" width="600px">
-        <v-card elevation="0">
-          <v-app-bar flat dark color="#2d2d2a"> </v-app-bar>
-          <v-card-title>
-            <span class="headline">{{ routinesE[0].name }}</span>
-          </v-card-title>
+<template v-for="(r, i) in routinesE">
+        <v-dialog v-model="routineDialog[i]" width="600px" :key="r.id">
+            <v-card elevation="0">
+            <v-app-bar flat dark color="#2d2d2a"> </v-app-bar>
+            <v-card-title>
+                <span class="headline">{{ routinesE[i].name }}</span>
+            </v-card-title>
 
-          <v-card-text>
-            Lorem ipsum dolor sit amet, semper quis, sapien id natoque elit.
-            Nostra urna at, magna at neque sed sed ante imperdiet, lorem
-          </v-card-text>
-        </v-card>
-      </v-dialog>
-    </template>
+            <v-card-text>
+                Lorem ipsum dolor sit amet, semper quis, sapien id natoque elit.
+                Nostra urna at, magna at neque sed sed ante imperdiet, lorem
+            </v-card-text>
+            </v-card>
+        </v-dialog>
+</template> -->
+    
+
+    
   </v-container>
 </template>
 
@@ -72,20 +100,36 @@ export default {
       categories: ["Cat 1", "Cat 2", "Cat 3"],
       filters: ["Deporte", "Duracion", "Puntuacion"],
       routinesE: [],
-      routineDialog: false,
-      wanted: Number
+      routineDialog: [],
+      wanted: Number,
+      i: Number
     };
   },
-  beforeMount: function () {
-    this.axios
-      .get(UserApi.baseUrl + "/routines/")
-      .then((response) => {
-        console.log(response.data.results);
-        this.routinesE = response.data.results;
-        console.log(this.routinesE[0].creator.username);
-      })
-      .catch(() => console.log("Error al obtener los datos de rutinas"));
-  }
-};
+  beforeCreate: function () {
+console.log("DSADASD");
+        this.axios
+        .get(UserApi.baseUrl + "/routines/")
+        .then((response) => {
+            console.log(response.data.results);
+            this.routinesE = response.data.results;
+            console.log(this.routinesE[0].creator.username);
+
+        for(this.i = 0; this.i < this.routinesE.length; this.i++){
+            this.routineDialog[this.i] = false;
+        }
+        })
+        .catch(() => console.log("Error al obtener los datos de rutinas"));
+
+
+       
+    },
+    methods:{
+    cc: function(){
+             console.log(this.routineDialog[0]);
+        }
+
+    }
+   
+}
 </script>
 
