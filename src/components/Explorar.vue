@@ -23,7 +23,7 @@
     <hr />
 
     <div class="ma-3" v-for="routine in routines" :key="routine.id">
-      <v-card elevation="4" outlined @click="alerta">
+      <v-card elevation="4" outlined>
         <v-card-title>{{ routine.name }}</v-card-title>
         <v-card-subtitle>
           <v-icon>mdi-account</v-icon>
@@ -31,16 +31,35 @@
         </v-card-subtitle>
         <v-card-text>
           <h3>Descripción:</h3>
-          {{ routine.detail }}
+          <p>{{ routine.detail }}</p>
           <h3>Duración:</h3>
-          {{ routine.duracion }}
+          <p>{{ routine.duracion }}</p>
 
           <h3>Materiales:</h3>
-          -
+          <p>-</p>
           <h3>Dificultad:</h3>
-          {{ routine.difficulty }}
+          <p>{{ routine.difficulty }}</p>
         </v-card-text>
       </v-card>
+
+      <v-dialog v-model="dialog" width="600px">
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn color="primary" dark v-bind="attrs" v-on="on">
+            Open Dialog
+          </v-btn>
+        </template>
+        <v-card>
+          <v-app-bar flat dark color="#2d2d2a"> </v-app-bar>
+          <v-card-title>
+            <span class="headline">{{ routine.name }}</span>
+          </v-card-title>
+
+          <v-card-text>
+            Lorem ipsum dolor sit amet, semper quis, sapien id natoque elit.
+            Nostra urna at, magna at neque sed sed ante imperdiet,
+          </v-card-text>
+        </v-card>
+      </v-dialog>
     </div>
   </v-container>
 </template>
