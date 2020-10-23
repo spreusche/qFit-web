@@ -8,7 +8,7 @@
 
       <v-spacer></v-spacer>
       <!--          @click="editRoutine" -->
-      <v-btn color="error" @click=$router.go(-1)> CANCELAR </v-btn>
+      <v-btn color="error" @click=$router.go(-1)> ATRÁS </v-btn>
       <v-btn
 
           @click="this.editRoutine"

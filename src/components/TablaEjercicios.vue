@@ -14,7 +14,7 @@
       <v-spacer></v-spacer>
         <v-btn class="mr-3" color="error"
                :to="{name:'EditarRutina', params: { id: this.routineID}}"
-        > CANCELAR </v-btn>
+        > ATRÁS </v-btn>
 
     </v-row>
 

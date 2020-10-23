@@ -6,14 +6,39 @@
       </v-col>
     </v-row>
     <v-row>
-      <v-col cols="1">
-        <v-btn color="green" text outlined :to="{name:'EditarRutina', params: {id: -1}}" >
+      <v-col cols="2">
+        <v-btn
+          color="green"
+          text
+          outlined
+          :to="{ name: 'EditarRutina', params: { id: -1 } }"
+        >
           + Crear Rutina
+        </v-btn>
+
+      </v-col>
+
+    </v-row>
+
+    <hr />
+    <v-row>
+      <v-col cols="2">
+        <v-select :items="filters" label="Filtrar" dense outlined v-model="difficulty"></v-select>
+      </v-col>
+      <v-col cols="2">
+        <v-select :items="orderBy" label="Ordenar Por" dense outlined v-model="order"></v-select>
+      </v-col>
+      <v-col cols="2">
+        <v-select :items="ascOrDesc" label="Orden" dense outlined v-model="direction"></v-select>
+      </v-col>
+      <v-col>
+        <v-btn icon color="orange" @click="update">
+          <v-icon>mdi-cached</v-icon>
         </v-btn>
       </v-col>
     </v-row>
 
-    <hr />
+
 
     <div class="ma-3" v-for="routine in routines" :key="routine">
       <v-card elevation="4" max-width="1114">
@@ -32,11 +57,20 @@
                 <v-icon>mdi-share</v-icon>
               </v-btn>
 
-              <v-btn icon v-bind="attrs" :to="{name:'EditarRutina', params: { id: routine.id }}">
+              <v-btn
+                icon
+                v-bind="attrs"
+                :to="{ name: 'EditarRutina', params: { id: routine.id } }"
+              >
                 <v-icon>mdi-pencil</v-icon>
               </v-btn>
 
-              <v-btn icon v-bind="attrs" color="red">
+              <v-btn
+                icon
+                v-bind="attrs"
+                color="red"
+                @click="eliminarRutina(routine.id)"
+              >
                 <v-icon>mdi-delete</v-icon>
               </v-btn>
             </v-card-actions>
@@ -47,9 +81,7 @@
           <v-spacer></v-spacer>
 
           <v-btn icon @click="routine.isPublic = !routine.isPublic">
-            <v-icon>{{
-              routine.isPublic ? "mdi-chevron-down" : "mdi-chevron-up"
-            }}</v-icon>
+            <v-icon>{{ routine.isPublic ? "mdi-chevron-down" : "mdi-chevron-up" }}</v-icon>
           </v-btn>
         </v-card-actions>
         <v-expand-transition>
@@ -89,8 +121,13 @@
 import { UserApi } from "../api/user";
 export default {
   data: () => ({
-    categories: ["Cat 1", "Cat 2", "Cat 3"],
-    filters: ["Deporte", "Duracion", "Puntuacion"],
+    filters: ["", "rookie", "begginer", "intermediate", "advanced", "expert"],
+    difficulty: "",
+    orderBy: ["", "id", "name", "detail", "dateCreated", "averageRating", "difficulty", "categoryID", "creatorID"],
+    order: "",
+    ascOrDesc: ["", "asc", "desc"],
+    direction: "",
+    queryFilters: "",
     routines: [],
     flag: -1,
     //     [
@@ -119,7 +156,7 @@ export default {
   }), //cuando se entra a la pagina se hace esto :D Y ME FUNKA BIEN
   beforeMount: function () {
     this.axios
-      .get(UserApi.baseUrl + "/user/current/routines/")
+      .get(UserApi.baseUrl + "/user/current/routines/?size=10")
       .then((response) => {
         console.log(response.data.results);
         this.routines = response.data.results;
@@ -129,27 +166,52 @@ export default {
   },
 
   methods: {
-    //OJO QUE ESTA FUNCION VA A PONER LAS RUTINAS DE JOHN DOE, NO LAS DEL USUARIO ACTUAL
+    //update routines
     update: function () {
+      this.queryFilters = "";
+      console.log(this.order);
+      if(this.difficulty != ""){
+        this.queryFilters = this.queryFilters + "difficulty=" + this.difficulty;
+      }
+      if(this.order != ""){
+        if(this.queryFilters != ""){
+          this.queryFilters = this.queryFilters + "&";
+        }
+        this.queryFilters = this.queryFilters + "orderBy=" + this.order;
+      }
+      if(this.direction != ""){
+        this.queryFilters = this.queryFilters + "&direction=" + this.direction;
+      }
+      this.queryFilters=this.queryFilters + "&size=9999"
+      console.log("this.queryfilters");
+      console.log(this.queryFilters);
+
+  //    "?difficulty=" + this.difficulty + "&orderBy=" + this.order + "&direction=" + this.direction
+
       this.axios
-        .get(UserApi.baseUrl + "/user/current/routines/", {
-          headers: {
-            Authorization:
-              "bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImlhdCI6MTYwMzMyMTUzNjcyNCwiZXhwIjoxNjAzMzI0MTI4NzI0fQ.G_1_3s9Xp-aeQybdbavRdviU5bSC2unkQqtnoQiruhw",
-          },
-        })
-        .then((response) => {
-          console.log(response.data.results);
-          console.log(this.routines);
-          this.routines = response.data.results;
-          console.log(this.routines);
-        });
+          .get(UserApi.baseUrl + "/user/current/routines/?" + this.queryFilters)
+          .then((response) => {
+            console.log(this.routines);
+            this.routines = response.data.results;
+            console.log(this.routines);
+            console.log("updateado");
+          });
 
 
-      },
     },
-  setID: function (num) {
-    UserApi.currID(num);
+
+    eliminarRutina: function (routineID) {
+      this.axios
+          .delete(UserApi.baseUrl + "/routines/" + routineID)
+          .then((response) => {
+            console.log(response);
+            this.update();
+          })
+    },
+
+    setID: function (num) {
+      UserApi.currID(num);
+    },
   },
-};
+  };
 </script>

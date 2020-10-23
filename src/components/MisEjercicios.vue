@@ -42,7 +42,10 @@
             <v-spacer></v-spacer>
 
             <v-btn icon v-bind="attrs">
-              <v-icon>mdi-pencil</v-icon>
+
+              <!--                  :to="{name:'CrearEjercicio', params: { routineID: , cycleID: }}"-->
+              <v-icon
+              >mdi-pencil</v-icon>
             </v-btn>
 
             <v-btn icon v-bind="attrs" color="red">
