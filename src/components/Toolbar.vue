@@ -46,7 +46,6 @@
             <v-list-item-title>{{ username }}</v-list-item-title>
           </v-list-item>
           <template>
-            <v-row justify="center">
               <v-dialog v-model="dialog" persistent max-width="600px">
                 <template v-slot:activator="{ on, attrs }">
                   <v-list-item v-bind="attrs" v-on="on">
@@ -151,7 +150,6 @@
                   </v-card-text>
                 </v-card>
               </v-dialog>
-            </v-row>
           </template>
 
           <v-list-item to="/" @click="logOut()">
