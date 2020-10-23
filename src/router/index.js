@@ -4,10 +4,10 @@ import Explorar from '../components/Explorar'
 import MisRutinas from '../components/MisRutinas'
 import MisEjercicios from '../components/MisEjercicios'
 import Principal from '../components/Principal'
-import CrearRutina from '../components/CrearRutina'
 import EditarRutina from '../components/EditarRutina'
+import CrearEjercicio from '../components/CrearEjercicio'
 import TablaEjercicios from '../components/TablaEjercicios'
-import { UserApi } from '../api/user'
+import axios from 'axios'
 
 Vue.use(VueRouter)
 
@@ -21,38 +21,40 @@ const routes = [
     path: '/Explorar',
     name: 'Explorar',
     component: Explorar,
-   // meta: {requiresAuth:true}
+    meta: {requiresAuth:true}
 
   },
   {
     path: '/MisRutinas',
     name: 'MisRutinas',
     component: MisRutinas,
-   // meta: {requiresAuth:true}
+    meta: {requiresAuth:true}
   },
-  {
-    path: '/CrearRutina',
-    name: 'CrearRutina',
-    component: CrearRutina,
-   // meta: {requiresAuth:true}
-  },
+
   {
     path: '/EditarRutina/:id',
     name: 'EditarRutina',
     component: EditarRutina,
-   // meta: {requiresAuth:true}
+    meta: {requiresAuth:true}
   },
   {
     path: '/MisEjercicios',
     name: 'MisEjercicios',
     component: MisEjercicios,
-   // meta: {requiresAuth:true}
+    meta: {requiresAuth:true}
   },
   {
-    path: '/Ejercicios/Calor',
-    name: 'Ejercicios',
+    path: '/MisEjercicios/CrearEjercicio',
+    name: 'CrearEjercicio',
+    component: CrearEjercicio,
+    meta: {requiresAuth:true}
+  },
+  {
+    //id es la rutina, num es si es entrada en calro ppal o cooldown, cycleID es es ciclo en cuestión
+    path: '/TablaEjercicios/:id/:num/:cycleID',
+    name: 'TablaEjercicios',
     component: TablaEjercicios,
-    // meta: {requiresAuth:true}
+    meta: {requiresAuth:true}
   }
 ]
 
@@ -69,8 +71,13 @@ const router = new VueRouter({
 //   // ruta requiere autenticacion
    const routeAuth = to.matched.some(record => record.meta.requiresAuth);
 //   // para ver si el usuario hizo el login
-   const token = UserApi.token;
+   const token = localStorage.getItem("token");
 //
+    if(token!=null){
+      axios.defaults.headers.common[
+        "Authorization"
+      ] = `bearer ${localStorage.getItem("token")}`;
+    }
    if(routeAuth && token == null){
      next({name:'Principal'});
    } else {

@@ -4,8 +4,10 @@ import router from './router'
 import vuetify from './plugins/vuetify';
 import axios from 'axios'
 import VueAxios from 'vue-axios'
+import VueCookie from 'vue-cookie'
 
-Vue.use(VueAxios, axios);
+
+Vue.use(VueAxios, axios,VueCookie);
 
 Vue.config.productionTip = false
 

@@ -2,22 +2,19 @@
   <v-container fluid>
 
     <v-row >
-      <v-col cols="2">
-        <div>
-          <h1>Crear Rutina ></h1>
-        </div>
-      </v-col>
 
-      <v-col>
+        <div>
+          <h1>Crear Rutina > </h1>
+        </div>
+
         <div>
           <h1 class="blue--text">{{title}}</h1>
         </div>
-      </v-col>
 
-      <v-spacer></v-spacer><v-spacer></v-spacer>
-      <v-col>
-        <v-btn color="error" to= '/MisRutinas'> CANCELAR </v-btn>
-      </v-col>
+      <v-spacer></v-spacer>
+
+        <v-btn class="mr-3" color="error" @click="$router.go(-1)"> CANCELAR </v-btn>
+
     </v-row>
 
     <hr/>
@@ -55,9 +52,10 @@
 
     </div>
 
-<!--    footer of table-->
+<!-- footer of table-->
     <v-row justify="center">
       <v-btn>+ agregar ejercicio</v-btn>
+
     </v-row>
 
 
@@ -65,14 +63,19 @@
 </template>
 
 <script>
-//import {UserApi} from "@/api/user";
 
 import {UserApi} from "@/api/user";
 
 export default {
 
+  props: {
+
+  },
+
   data: () => ({
     title: "Entrada en Calor",
+    number: 0,
+
     currentCycle: [],
     // Hardcodeado la rutina y ciclo IDs
     routineID: 1,
@@ -81,6 +84,19 @@ export default {
 
   //cuando se entra a la pagina se hace esto :D
   beforeMount: function () {
+
+    this.number=this.$route.params.id;
+
+    if(this.number == 1){
+      this.title="Entrada en Calor";
+    } else if(this.number == 2) {
+      this.title="Ejercitación Principal";
+    } else if(this.number==3){
+      this.title="Enfriamiento";
+    } else {
+      this.title="error, check this.number";
+    }
+
     this.axios
         .get(UserApi.baseUrl + "/routines/" + this.routineID + "/cycles/" + this.cycleID + "/exercises")
         .then((response) => {
@@ -90,6 +106,11 @@ export default {
         })
         .catch(() => console.log("errorciño agarrando los datos de la api"));
   },
+
+  methods: {
+    logg: function(){
+    }
+  }
 
 
 }

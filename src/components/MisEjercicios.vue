@@ -7,7 +7,7 @@
         </v-row>
       <v-row>
         <v-col cols="1">
-          <v-btn color="green" text outlined to="/CrearRutina">
+          <v-btn color="green" text outlined to="MisEjercicios/CrearEjercicio">
             + Crear Ejercicio
           </v-btn>
         </v-col>

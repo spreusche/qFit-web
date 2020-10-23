@@ -2,87 +2,117 @@
   <v-container fluid>
     <v-row>
 
-      <div>
-        <h1>Editar Rutina</h1>
+      <div class="ml-3">
+        <h1>{{ title }}</h1>
       </div>
 
       <v-spacer></v-spacer>
 
       <v-btn color="error" to="/MisRutinas"> CANCELAR </v-btn>
       <v-btn
+          @click="editRoutine"
       color="light-green accent-4 ml-3 mr-1"
-      dark
-      @click="createRoutine">
+      dark >
         GUARDAR
       </v-btn>
 
+
     </v-row>
 
-    <hr />
+    <v-divider></v-divider>
+    <v-row>
+      <v-col>
 
-    <v-form ref="form" v-model="valid" lazy-validation>
-      <v-row>
-        <v-col cols="1">
-          <v-header><h3>Nombre:</h3></v-header>
-        </v-col>
-        <v-col cols="6">
-          <v-text-field
-            class="pa-2"
-            v-model="name"
-            outlined
-            required
-            :rules="rules"
-          ></v-text-field>
-        </v-col>
-      </v-row>
+        <v-card elevation="0">
+          <v-form ref="form" v-model="valid" lazy-validation>
+            <v-row>
+              <v-col cols="3">
+                <v-header><h3>Nombre:</h3></v-header>
+              </v-col>
+              <v-col cols="8">
+                <v-text-field
+                  class="pa-2"
+                  v-model="name"
+                  outlined
+                  required
+                  :rules="rules"
+                ></v-text-field>
+              </v-col>
+            </v-row>
 
-      <v-row>
-        <v-col cols="1">
-          <v-header><h3>Descripción:</h3></v-header>
-        </v-col>
-        <v-col cols="6">
-          <v-textarea
-            v-model="description"
-            outlined
-            auto-grow
-            clearable
-            clear-icon="mdi-close-circle"
-            :rules="rules"
-            required
-          ></v-textarea>
-        </v-col>
-      </v-row>
+            <v-row>
+              <v-col cols="3">
+                <v-header><h3>Descripción:</h3></v-header>
+              </v-col>
+              <v-col cols="8">
+                <v-textarea
+                  v-model="description"
+                  outlined
+                  auto-grow
+                  clearable
+                  clear-icon="mdi-close-circle"
+                  :rules="rules"
+                  required
+                ></v-textarea>
+              </v-col>
+            </v-row>
 
-      <v-row>
-        <v-col cols="1">
-          <v-header><h3>Materiales:</h3></v-header>
-        </v-col>
-        <v-col cols="6">
-          <v-text-field outlined v-model="materials"></v-text-field>
-        </v-col>
-      </v-row>
-    </v-form>
+            <v-row>
+              <v-col cols="3">
+                <v-header><h3>Materiales:</h3></v-header>
+              </v-col>
+              <v-col cols="8">
+                <v-text-field outlined v-model="materials"></v-text-field>
+              </v-col>
+            </v-row>
+          </v-form>
+        </v-card>
+      </v-col>
+
+      <v-col>
+        <v-card elevation="0">
+          <v-row>
+              <v-col cols="3">
+                <v-header><h3>Categorías:</h3></v-header>
+              </v-col>
+              <v-col cols="8">
+                <v-text-field outlined v-model="materials"></v-text-field>
+              </v-col>
+          </v-row>
+
+          <v-row>
+              <v-col cols="3">
+                <v-header><h3>Deportes:</h3></v-header>
+              </v-col>
+              <v-col cols="8">
+                <v-text-field outlined v-model="materials"></v-text-field>
+              </v-col>
+            </v-row>
+
+        </v-card>
+      </v-col>
+    </v-row>
 
 
     <v-row>
       <v-col>
         <v-card>
           <v-card-title class="justify-center">ENTRADA EN CALOR</v-card-title>
-          <FormEjercicios name="ENTRADA EN CALOR" ref="calor" path="/Ejercicios/calor"></FormEjercicios>
+          <FormEjercicios name="ENTRADA EN CALOR" ref="calor" number=1 :id=this.id></FormEjercicios>
         </v-card>
       </v-col>
 
       <v-col>
         <v-card>
           <v-card-title class="justify-center">EJERCITACIÓN PRINCIPAL</v-card-title>
-          <FormEjercicios name="EJERCITACIÓN PRINCIPAL" ref="ppal" path="/Ejercicios/ppal"></FormEjercicios>
+          <FormEjercicios name="EJERCITACIÓN PRINCIPAL" ref="ppal" number=2 :id=this.id></FormEjercicios>
         </v-card>
       </v-col>
 
       <v-col>
         <v-card>
           <v-card-title class="justify-center">ENFRIAMIENTO</v-card-title>
-          <FormEjercicios name="ENFRIAMIENTO" ref="frio" path="/Ejercicios/frio"></FormEjercicios>
+          <FormEjercicios name="ENFRIAMIENTO" ref="frio" number=3 :id=this.id> </FormEjercicios>
         </v-card>
       </v-col>
     </v-row>
@@ -99,42 +129,81 @@
  export default {
 
    data: () => ({
-     id: 0,
+     id: -1,
      valid: true,
      name: "",
      description: "",
      materials: "",
-     currRoutineID: "",
-     rules: [(v) => !!v || "Debe completar la información"],
+     rules: [(v) => !!v || "Debes completar la información"],
      select: null,
+     title: "",
    }),
    components: {
      FormEjercicios,
    },
 
-   methods: {
-     createRoutine: function() {
+   beforeMount: function () {
+     if(this.id != -1) {
        this.axios
-
-           .post(UserApi.baseUrl + "/routines",{
-             name: this.name,
-             detail: this.description,
-             isPublic: true,
-             difficulty: "rookie",
-             category: {
-               id: 1,
-             }
-           })
+           .get(UserApi.baseUrl + "/routines/" + this.id)
            .then((response) => {
-             console.log(response.data.id);
-             this.$refs.calor.createCycle(response.data.id, "warmup", 1);
-             this.$refs.ppal.createCycle(response.data.id, "exercise", 2);
-             this.$refs.frio.createCycle(response.data.id, "cooldown", 3);
-
-
+             console.log(response.data);
+             this.name = response.data.name;
+             this.description = response.data.detail;
+             this.materials = response.data.difficulty;
            })
+           .catch(() => console.log("errorciño agarrando los datos de la api"));
+        this.title="Editar Rutina";
+     } else {
+       this.title = "Crear Rutina";
+     }
+   },
+
+   methods: {
+     editRoutine: function() {
+
+       if (this.id != -1) {
+//si no es crear nueva rutina, edita la que estás editando
+         this.axios
+
+             .put(UserApi.baseUrl + "/routines/" + this.id, {
+               name: this.name,
+               detail: this.description,
+               isPublic: true,
+               difficulty: "rookie",
+               category: {
+                 id: 1,
+               }
+             })
+             .then((response) => {
+               console.log(response);
+             })
+       } else {
+         //else posteá la nueva rutina y ciclo
+         this.axios
+             .post(UserApi.baseUrl + "/routines",{
+               name: this.name,
+               detail: this.description,
+               isPublic: true,
+               difficulty: "rookie",
+               category: {
+                 id: 1,
+               }
+             })
+             .then((response) => {
+               console.log(response.data.id);
+               this.$refs.calor.createCycle(response.data.id, "warmup", 1);
+               this.$refs.ppal.createCycle(response.data.id, "exercise", 2);
+               this.$refs.frio.createCycle(response.data.id, "cooldown", 3);
+
+
+             })
+       }
      },
-   }
+   },
+   created() {
+            this.id = this.$route.params.id;
+        }
 
  };
  </script>

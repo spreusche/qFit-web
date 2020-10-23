@@ -7,7 +7,7 @@
     </v-row>
     <v-row>
       <v-col cols="1">
-        <v-btn color="green" text outlined to="/CrearRutina">
+        <v-btn color="green" text outlined :to="{name:'EditarRutina', params: {id: -1}}" >
           + Crear Rutina
         </v-btn>
       </v-col>
@@ -32,7 +32,7 @@
                 <v-icon>mdi-share</v-icon>
               </v-btn>
 
-              <v-btn icon v-bind="attrs" to='/CrearRutina' @click="setID(routine.id)">
+              <v-btn icon v-bind="attrs" :to="{name:'EditarRutina', params: { id: routine.id }}">
                 <v-icon>mdi-pencil</v-icon>
               </v-btn>
 
@@ -92,6 +92,7 @@ export default {
     categories: ["Cat 1", "Cat 2", "Cat 3"],
     filters: ["Deporte", "Duracion", "Puntuacion"],
     routines: [],
+    flag: -1,
     //     [
     //   {
     //     name: "Rutina de Brazos",

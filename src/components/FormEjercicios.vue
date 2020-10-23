@@ -31,11 +31,12 @@
       <v-row align="center">
           <v-btn
           color="grey lighten-2" elevation="3"
-          :to=this.path
-          width="94%">
+          :to="{name:'TablaEjercicios', params: { id: this.id, num: this.number, cycleID: this.cycleID}}"
+          width="94%"
+          :cycleID="this.number">
           Ejercicios
           </v-btn>
-
+        <v-btn @click="logg">print current url</v-btn>
       </v-row>
     </v-container>
   </v-form>
@@ -51,7 +52,8 @@ export default {
 
      props: {
     name: String,
-    path: String,
+    number: Number, //1 2 o 3
+    id:Number, //routine id
 
   },
 
@@ -60,6 +62,8 @@ export default {
       descansoRep: '',
       descansoEj: '',
       valid: true,
+      cycleID: 0,
+      pageNum: 0,
       generalRules:[
         v => !!v || '*'
       ],
@@ -69,31 +73,59 @@ export default {
     ]
     }),
 
+ // beforeMount: function () {
+ //   this.id=this.$route.params.id;
+
+ //    if(this.pageNum != -1) {
+ //      //si no es create new, agarrá los datos y metelos al form
+ //      this.axios
+ //          .get(UserApi.baseUrl + "/routines/" + this.id + "/cycles/")
+ //          .then((response) => {
+ //            console.log(response.data.results);
+    //         this.description = response.data.detail;
+    //         this.materials = response.data.difficulty;
+    //       })
+    //       .catch(() => console.log("errorciño agarrando los datos de la api"));
+    //   this.title="Editar Rutina";
+    // } else {
+    //   this.title = "Crear Rutina";
+ //   }
+ // },
 
   methods: {
-      createCycle: function(id, theType, ornen){
+    createCycle: function (id, theType, ornen) {
 
-        console.log(ornen);
-
+      if (this.id == -1) {
+//estas en create new
         this.axios
-            .post(UserApi.baseUrl + "/routines/" + id + "/cycles",{
+            .post(UserApi.baseUrl + "/routines/" + id + "/cycles", {
 
-               name: this.name,
-               detail: this.descansoRep + '&' + this.descansoEj,
-               type: theType,
-               order: ornen,
-               repetitions: parseInt(this.repeticiones),
+              name: this.name,
+              detail: this.descansoRep + '&' + this.descansoEj,
+              type: theType,
+              order: ornen,
+              repetitions: parseInt(this.repeticiones),
 
             })
             .then((response) => {
               console.log(response);
               console.log("routine id:");
               console.log(id);
+              this.routineID = id;
               console.log("cicle id:");
               console.log(response.data.id);
+              this.cycleID = response.data.id;
             })
-      },
-  }
 
-}
+      } else {
+        //tenes que updatear el current
+        return;
+      }
+    },
+
+    logg: function () {
+      console.log(this.$route.params.id);
+    }
+  }
+};
 </script>

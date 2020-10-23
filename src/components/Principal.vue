@@ -241,11 +241,12 @@ export default {
           password: this.password,
         })
         .then((response) => {
+          localStorage.setItem("token",response.data.token);
           UserApi.token = response.data.token;
-          console.log("entramos");
+          console.log(localStorage.getItem("token"));
           this.axios.defaults.headers.common[
             "Authorization"
-          ] = `bearer ${UserApi.token}`;
+          ] = `bearer ${localStorage.getItem("token")}`;
           // router.go(1);
           router.push({ name: "Explorar" });
         })

@@ -42,6 +42,9 @@
           </v-btn>
         </template>
         <v-list>
+          <v-list-item>
+            <v-list-item-title>{{ user }}</v-list-item-title>
+          </v-list-item>
           <template>
             <v-row justify="center">
               <v-dialog v-model="dialog" persistent max-width="600px">
@@ -152,7 +155,7 @@
             </v-row>
           </template>
 
-          <v-list-item to="/">
+          <v-list-item to="/" @click="logOut()">
             <v-list-item-title>Cerrar Sesión</v-list-item-title>
           </v-list-item>
         </v-list>
@@ -180,6 +183,7 @@ export default {
     lastName: "",
     username: "",
     birthdate: "",
+    user: "",
   }),
 
   watch: {
@@ -192,15 +196,30 @@ export default {
     save(date) {
       this.$refs.menu.save(date);
     },
+
     getCurrent: function () {
       this.axios
         .get(UserApi.baseUrl + "/user/current")
         .then((response) => {
-          console.log(response.data);
-          return response.data;
+          return response.data.username;
         })
         .catch((error) => console.log(error));
     },
+
+    logOut: function () {
+      this.axios
+        .post(UserApi.baseUrl + "/user/logout")
+        .then(localStorage.clear())
+        .catch((error) => console.log(error));
+    },
+  },
+  created() {
+    this.axios
+      .get(UserApi.baseUrl + "/user/current")
+      .then((response) => {
+        this.user = response.data.username;
+      })
+      .catch((error) => console.log(error));
   },
 };
 </script>
