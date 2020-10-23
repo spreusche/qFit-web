@@ -55,22 +55,6 @@
                             <v-card-text>
                               <v-row>
                                 <v-col cols="12">
-                                  <v-row justify="center">
-                                    <v-btn
-                                      block
-                                      elevation="2"
-                                      color="#337CA0"
-                                      dark
-                                      to="/Explorar"
-                                      @click="dialog = false"
-                                      class="mb-2"
-                                    >
-                                      <v-icon left> mdi-google </v-icon>
-                                      Ingresar con Google
-                                    </v-btn>
-                                  </v-row>
-
-                                  <v-divider class="mb-4" />
 
                                   <!--Input registro usuario -->
                                   <v-container v-show="!verification">
