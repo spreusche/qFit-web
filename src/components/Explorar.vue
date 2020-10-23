@@ -1,3 +1,4 @@
+
 <template >
   <v-container fluid id="Explorar">
     <v-row>
@@ -38,8 +39,6 @@
           <p>{{ routine.duracion }}</p>
 
           <h3>Materiales:</h3>
-          <p>-</p>
-          <h3>Dificultad:</h3>
           <p>{{ routine.difficulty }}</p>
         </v-card-text>
       </v-card>
@@ -53,35 +52,30 @@
         <div v-if="routinesE && routinesE.length > 0">
                     <v-card>
                       <v-app-bar flat dark color="#2d2d2a"> 
-                        <v-toolbar-title> <h1>{{ routinesE[this.index].name }} </h1> </v-toolbar-title>
+                        <v-toolbar-title> <h1>{{ routinesE[this.index].name.substr(0, routinesE[this.index].name.indexOf('&')) }} </h1> </v-toolbar-title>
                       </v-app-bar>
                       
                       <v-card-title>
                           <v-icon>mdi-account</v-icon>
                           Creado por {{ routinesE[index].creator.username }}
                       </v-card-title>
+<hr/>
                       <v-card-subtitle>
-                        Descripción:
+                        <h2><u>Descripción:</u></h2>
                       </v-card-subtitle>
                         <v-card-text>
                           {{ routinesE[index].detail }} 
                         </v-card-text> 
-
+<hr/>
                       <template v-if="!errorOccured">
 
-                        <v-card-text v-for="cycle in cycles" :key="cycle.id">
-                            <v-card-subtitle>
-                            {{ cycle.name }} 
-                            </v-card-subtitle>
-                            <v-card-text>
-                            {{ cycle.detail }}
-                            </v-card-text> 
-                        </v-card-text>
-                          <div v-for="(exercises, index) in exerciseArray" :key="index">
+                      <v-card-subtitle> <h2><u>Ejercicios que encontrará en esta rutina:</u></h2></v-card-subtitle> 
+                        
+                          <div v-for="(exercises, index) in exerciseArray" :key="index + 'd'">
                             <template v-for="(exercise, index2) in exercises">
-                              <v-card-text :key="index2">
+                              <v-card-text :key="index2 + 'f'">
                                 <v-card-subtitle>
-                                {{ exercise.name }}
+                               <h3><u> {{ exercise.name }} </u></h3>
                               </v-card-subtitle>
                               <v-card-text>
                                 {{ exercise.detail }}
@@ -90,12 +84,16 @@
                             </template>
                           </div>
 
+
                         
 
                       </template>
                       <template v-else>
                         <v-card-text>
-                          OH NO! Algo salió mal al cargar esta rutina. Intentalo de nuevo. <!--Esto contempla ambos ciclos y ejercicios -->
+                        <h2 style="color:red;">  
+                        OH NO! Algo salió mal al cargar esta rutina. 
+                        Intentalo de nuevo.
+                      </h2> <!--Esto contempla ambos ciclos y ejercicios -->
                         </v-card-text>
                       </template>
                          
@@ -133,9 +131,7 @@ export default {
         this.axios
         .get(UserApi.baseUrl + "/routines/")
         .then((response) => {
-            console.log(response.data.results);
             this.routinesE = response.data.results;
-            console.log(this.routinesE[0].creator.username);
 
         for(this.i = 0; this.i < this.routinesE.length; this.i++){
             this.routineDialog[this.i] = false;
@@ -152,8 +148,6 @@ export default {
               this.index = index;       
       },
       getRoutineCycles(id){
-console.log("CREMON");
-console.log(UserApi.baseUrl + "/routines/" + id + "/cycles");
         this.axios.get(UserApi.baseUrl + "/routines/" + id + "/cycles")
         .then(response => {
           this.cycles = response.data.results;
@@ -171,13 +165,10 @@ console.log(this.cycles);
       },
       getRoutineInfo(id){
         this.errorOccured = false;
-        console.log("MARMOTA");
-        console.log(id);
         this.getRoutineCycles(id);
 
         if(this.cycles.length > 0){
           for(this.i = 0; this.i < this.cycles.length; this.i++){
-            console.log(this.cycles[this.i].id + "ERES AZUCAR AMARGOOOO");
             this.getRoutineExcercises(id, this.cycles[this.i].id);
           }
         }else{
@@ -190,7 +181,9 @@ console.log(this.cycles);
       },
       cleanArrays: function(){ 
         this.exerciseArray = [];
+
       }
     }
 }
 </script>
+

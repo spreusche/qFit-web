@@ -7,7 +7,8 @@
         </v-row>
       <v-row>
         <v-col cols="1">
-          <v-btn color="green" text outlined to="MisEjercicios/CrearEjercicio">
+          <v-btn color="green" text outlined
+                 :to="{name:'CrearEjercicio', params: { routineID: 1, cycleID: 1}}" >
             + Crear Ejercicio
           </v-btn>
         </v-col>
@@ -110,6 +111,7 @@ export default {
     },
     update: function () { //esto se tiene que correr una vez despues de que se carga la pagina para que carguen las imagenes
       this.axios
+          //routine 1 cycle 1 tiene los ejs
           .get(UserApi.baseUrl + "/routines/1/cycles/1/exercises")
           .then((response) => {
             this.masterCycle = response.data.results;

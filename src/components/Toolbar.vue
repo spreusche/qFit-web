@@ -43,7 +43,7 @@
         </template>
         <v-list>
           <v-list-item>
-            <v-list-item-title>{{ user }}</v-list-item-title>
+            <v-list-item-title>{{ username }}</v-list-item-title>
           </v-list-item>
           <template>
             <v-row justify="center">
@@ -86,7 +86,6 @@
                             <v-col>
                               <v-text-field
                                 label="Apellido"
-                                persistent-hint
                                 required
                                 filled
                                 v-model="lastName"
@@ -183,8 +182,11 @@ export default {
     lastName: "",
     username: "",
     birthdate: "",
-    user: "",
+    contact: "",
+    gender: "",
   }),
+
+
 
   watch: {
     menu(val) {
@@ -212,14 +214,38 @@ export default {
         .then(localStorage.clear())
         .catch((error) => console.log(error));
     },
+    changeData: function () {
+      this.axios
+        .put(UserApi.baseUrl + "/user/current", {
+          username: this.username,
+          fullName: this.name + '' + this.lastName,
+          gender: "male",
+          birthdate: 284007600000,
+          email: this.email,
+          phone: this.contact,
+          avatarUrl: this.avatarUrl,
+        })
+        .then(console.log("si"))
+        .catch((error) => console.log(error));
+    },
+    updateData: function () {
+      this.axios
+        .get(UserApi.baseUrl + "/user/current")
+        .then((response) => {
+          this.username = response.data.username;
+          var fullname = response.data.fullName.split("&");
+          this.name = fullname[0];
+          this.lastName = fullname[1];
+          this.birthdate = response.data.birthdate;
+          this.email = response.data.email;
+          this.contact = response.data.phone;
+          this.avatarUrl = response.data.avatarUrl;
+        })
+        .catch((error) => console.log(error));
+    },
   },
   created() {
-    this.axios
-      .get(UserApi.baseUrl + "/user/current")
-      .then((response) => {
-        this.user = response.data.username;
-      })
-      .catch((error) => console.log(error));
+    this.updateData();
   },
 };
 </script>

@@ -7,10 +7,11 @@
       </div>
 
       <v-spacer></v-spacer>
-
-      <v-btn color="error" to="/MisRutinas"> CANCELAR </v-btn>
+      <!--          @click="editRoutine" -->
+      <v-btn color="error" @click=$router.go(-1)> CANCELAR </v-btn>
       <v-btn
-          @click="editRoutine"
+
+          @click="this.editRoutine"
       color="light-green accent-4 ml-3 mr-1"
       dark >
         GUARDAR
@@ -137,6 +138,7 @@
      rules: [(v) => !!v || "Debes completar la información"],
      select: null,
      title: "",
+     cycleID: 0,
    }),
    components: {
      FormEjercicios,
@@ -165,9 +167,8 @@
        if (this.id != -1) {
 //si no es crear nueva rutina, edita la que estás editando
          this.axios
-
              .put(UserApi.baseUrl + "/routines/" + this.id, {
-               name: this.name,
+               name: this.name + "&",
                detail: this.description,
                isPublic: true,
                difficulty: "rookie",
@@ -177,6 +178,19 @@
              })
              .then((response) => {
                console.log(response);
+               this.axios
+               .get(UserApi.baseUrl + "/routines/" + this.id + "/cycles/")
+               .then((response) => {
+                 console.log("poop")
+                 console.log(response.data.totalCount);
+                 console.log(response);
+                 console.log(this.id);
+                 this.$refs.calor.createCycle(this.id, "warmup", 1);
+                 this.$refs.ppal.createCycle(this.id, "exercise", 2);
+                 this.$refs.frio.createCycle(this.id, "cooldown", 3);
+
+               })
+
              })
        } else {
          //else posteá la nueva rutina y ciclo
@@ -191,12 +205,15 @@
                }
              })
              .then((response) => {
+               console.log("san");
                console.log(response.data.id);
+               console.log("guchito");
                this.$refs.calor.createCycle(response.data.id, "warmup", 1);
                this.$refs.ppal.createCycle(response.data.id, "exercise", 2);
                this.$refs.frio.createCycle(response.data.id, "cooldown", 3);
-
-
+               this.$refs.calor.setID(response.data.id);
+               this.$refs.ppal.setID(response.data.id);
+               this.$refs.frio.setID(response.data.id);
              })
        }
      },

@@ -31,12 +31,11 @@
       <v-row align="center">
           <v-btn
           color="grey lighten-2" elevation="3"
-          :to="{name:'TablaEjercicios', params: { id: this.id, num: this.number, cycleID: this.cycleID}}"
+          :to="{name:'TablaEjercicios', params: { id: this.id, num: this.number}}"
           width="94%"
           :cycleID="this.number">
           Ejercicios
           </v-btn>
-        <v-btn @click="logg">print current url</v-btn>
       </v-row>
     </v-container>
   </v-form>
@@ -94,12 +93,12 @@ export default {
 
   methods: {
     createCycle: function (id, theType, ornen) {
+      console.log("holaaa");
 
-      if (this.id == -1) {
+//      if (this.id != -1) {
 //estas en create new
         this.axios
             .post(UserApi.baseUrl + "/routines/" + id + "/cycles", {
-
               name: this.name,
               detail: this.descansoRep + '&' + this.descansoEj,
               type: theType,
@@ -112,15 +111,14 @@ export default {
               console.log("routine id:");
               console.log(id);
               this.routineID = id;
-              console.log("cicle id:");
+              console.log("cycle id:");
               console.log(response.data.id);
               this.cycleID = response.data.id;
             })
+    },
 
-      } else {
-        //tenes que updatear el current
-        return;
-      }
+    setID: function(newNumber){
+      this.id=newNumber;
     },
 
     logg: function () {

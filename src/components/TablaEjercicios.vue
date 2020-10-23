@@ -12,8 +12,9 @@
         </div>
 
       <v-spacer></v-spacer>
-
-        <v-btn class="mr-3" color="error" @click="$router.go(-1)"> CANCELAR </v-btn>
+        <v-btn class="mr-3" color="error"
+               :to="{name:'EditarRutina', params: { id: this.routineID}}"
+        > CANCELAR </v-btn>
 
     </v-row>
 
@@ -54,8 +55,9 @@
 
 <!-- footer of table-->
     <v-row justify="center">
-      <v-btn>+ agregar ejercicio</v-btn>
-
+      <v-btn
+          :to="{name:'CrearEjercicio', params: { routineID: this.routineID, cycleID: this.cycleIDs[this.number-1]}}">
+        + agregar ejercicio</v-btn>
     </v-row>
 
 
@@ -76,16 +78,19 @@ export default {
     title: "Entrada en Calor",
     number: 0,
 
-    currentCycle: [],
+
     // Hardcodeado la rutina y ciclo IDs
     routineID: 1,
     cycleID: 1,
+    cycleIDs: [],
+    currentCycle: [],
   }),
 
   //cuando se entra a la pagina se hace esto :D
   beforeMount: function () {
 
-    this.number=this.$route.params.id;
+    this.number=this.$route.params.num;
+    this.routineID=this.$route.params.id;
 
     if(this.number == 1){
       this.title="Entrada en Calor";
@@ -97,19 +102,47 @@ export default {
       this.title="error, check this.number";
     }
 
-    this.axios
-        .get(UserApi.baseUrl + "/routines/" + this.routineID + "/cycles/" + this.cycleID + "/exercises")
-        .then((response) => {
-          this.currentCycle = response.data.results;
-          console.log(this.currentCycle);
-          console.log("BUENARDO");
-        })
-        .catch(() => console.log("errorciño agarrando los datos de la api"));
+    if(this.routineID != -1) {
+      this.axios
+          .get(UserApi.baseUrl + "/routines/" + this.routineID + "/cycles/")
+          .then((response) => {
+
+            if (response.data.totalCount > 0) {
+              this.cycleIDs = this.cycleIDs.concat(response.data.results[0].id);
+            }
+            if (response.data.totalCount > 1) {
+              this.cycleIDs = this.cycleIDs.concat(response.data.results[1].id);
+            }
+            if (response.data.totalCount > 2) {
+              this.cycleIDs = this.cycleIDs.concat(response.data.results[2].id);
+            }
+            console.log(this.cycleIDs);
+            console.log("BUENARDO");
+            this.getExercises();
+          }).catch(() => console.log("errorciño agarrando los datos de la api"))
+    }
+    console.log("uuuuuuuuu")
+    console.log(this.cycleIDs);
   },
 
   methods: {
-    logg: function(){
+    loggg: function(){
+      console.log("masvale");
+    },
+
+    getExercises: function() {
+      this.axios
+          .get(UserApi.baseUrl + "/routines/" + this.routineID + "/cycles/" + this.cycleIDs[this.number-1] + "/exercises/" )
+      .then((response) => {
+        console.log("abajo de esto");
+        console.log(this.$route.params);
+        console.log(this.cycleIDs[this.number-1]);
+        console.log("acá");
+        console.log(response.data.results);
+        this.currentCycle=response.data.results;
+      })
     }
+
   }
 
 
