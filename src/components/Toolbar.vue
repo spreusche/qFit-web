@@ -25,12 +25,18 @@
       <v-col>
         <v-text-field
           append-icon="mdi-magnify"
+          @click:append="router.push({ name: 'user', params: { userId } })"
+
+          @click.native="$router.push('/endreco/test')"
+          v-model="query"
           flat
           dense
           hide-details
           rounded
           label="Buscar"
           solo-inverted
+          clearable
+          clear-icon="mdi-close-circle"
         ></v-text-field>
       </v-col>
 
@@ -182,6 +188,7 @@ export default {
     birthdate: "",
     contact: "",
     gender: "",
+    query: "",
   }),
 
 
@@ -193,6 +200,11 @@ export default {
   },
 
   methods: {
+
+    logg: function(){
+      console.log("cosa:");
+      console.log(this.query);
+    },
     save(date) {
       this.$refs.menu.save(date);
     },

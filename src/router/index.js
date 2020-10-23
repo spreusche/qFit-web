@@ -25,6 +25,13 @@ const routes = [
 
   },
   {
+    path: '/Explorar/:query',
+    name: 'searchExplorar',
+    component: Explorar,
+    meta: {requiresAuth:true}
+
+  },
+  {
     path: '/MisRutinas',
     name: 'MisRutinas',
     component: MisRutinas,

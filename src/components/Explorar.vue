@@ -7,21 +7,25 @@
         <p class="text--secondary">Descubre rutinas de otros entrenadores</p>
       </v-col>
     </v-row>
-    <v-row>
-      <v-col cols="3">
-        <v-select :items="filters" label="Filtrar" dense outlined></v-select>
-      </v-col>
-      <v-col cols="3">
-        <v-select
-          :items="categories"
-          label="Categorias"
-          dense
-          outlined
-        ></v-select>
-      </v-col>
-    </v-row>
 
     <hr/>
+
+    <v-row>
+      <v-col cols="2">
+        <v-select :items="filters" label="Filtrar" dense outlined v-model="difficulty"></v-select>
+      </v-col>
+      <v-col cols="2">
+        <v-select :items="orderBy" label="Ordenar Por" dense outlined v-model="order"></v-select>
+      </v-col>
+      <v-col cols="2">
+        <v-select :items="ascOrDesc" label="Orden" dense outlined v-model="direction"></v-select>
+      </v-col>
+      <v-col>
+        <v-btn icon color="orange" @click="update">
+          <v-icon>mdi-cached</v-icon>
+        </v-btn>
+      </v-col>
+    </v-row>
 
 <div v-if="routinesE && routinesE.length > 0">
     <div class="ma-3" v-for="(routine, index) in routinesE" :key="index">
@@ -51,10 +55,10 @@
       <v-dialog  v-model="routineDialog" @click:outside="[routineDialog = !routineDialog, errorOccured = false, cleanArrays()]" width="600px">
         <div v-if="routinesE && routinesE.length > 0">
                     <v-card>
-                      <v-app-bar flat dark color="#2d2d2a"> 
+                      <v-app-bar flat dark color="#2d2d2a">
                         <v-toolbar-title> <h1>{{ routinesE[this.index].name.substr(0, routinesE[this.index].name.indexOf('&')) }} </h1> </v-toolbar-title>
                       </v-app-bar>
-                      
+
                       <v-card-title>
                           <v-icon>mdi-account</v-icon>
                           Creado por {{ routinesE[index].creator.username }}
@@ -64,13 +68,13 @@
                         <h2><u>Descripción:</u></h2>
                       </v-card-subtitle>
                         <v-card-text>
-                          {{ routinesE[index].detail }} 
-                        </v-card-text> 
+                          {{ routinesE[index].detail }}
+                        </v-card-text>
 <hr/>
                       <template v-if="!errorOccured">
 
-                      <v-card-subtitle> <h2><u>Ejercicios que encontrará en esta rutina:</u></h2></v-card-subtitle> 
-                        
+                      <v-card-subtitle> <h2><u>Ejercicios que encontrará en esta rutina:</u></h2></v-card-subtitle>
+
                           <div v-for="(exercises, index) in exerciseArray" :key="index + 'd'">
                             <template v-for="(exercise, index2) in exercises">
                               <v-card-text :key="index2 + 'f'">
@@ -79,32 +83,32 @@
                               </v-card-subtitle>
                               <v-card-text>
                                 {{ exercise.detail }}
-                              </v-card-text> 
+                              </v-card-text>
                             </v-card-text>
                             </template>
                           </div>
 
 
-                        
+
 
                       </template>
                       <template v-else>
                         <v-card-text>
-                        <h2 style="color:red;">  
-                        OH NO! Algo salió mal al cargar esta rutina. 
+                        <h2 style="color:red;">
+                        OH NO! Algo salió mal al cargar esta rutina.
                         Intentalo de nuevo.
                       </h2> <!--Esto contempla ambos ciclos y ejercicios -->
                         </v-card-text>
                       </template>
-                         
+
                     </v-card>
         </div>
-      </v-dialog> 
+      </v-dialog>
 
-  
-    
 
-    
+
+
+
   </v-container>
 </template>
 
@@ -116,8 +120,14 @@ import { UserApi } from "../api/user";
 export default {
   data() {
     return {
-      categories: ["Cat 1", "Cat 2", "Cat 3"],
-      filters: ["Deporte", "Duracion", "Puntuacion"],
+      filters: ["", "rookie", "begginer", "intermediate", "advanced", "expert"],
+      difficulty: "",
+      orderBy: ["", "id", "name", "detail", "dateCreated", "averageRating", "difficulty", "categoryID", "creatorID"],
+      order: "",
+      ascOrDesc: ["", "asc", "desc"],
+      direction: "",
+      queryFilters: "",
+
       routinesE: [],
       routineDialog: false,
       index: 0,
@@ -140,20 +150,20 @@ export default {
         .catch(() => console.log("Error al obtener los datos de rutinas"));
 
 
-       
+
     },
     methods:{
       saveIndex: function(index){
               this.routineDialog = !this.routineDialog
-              this.index = index;       
+              this.index = index;
       },
       getRoutineCycles(id){
         this.axios.get(UserApi.baseUrl + "/routines/" + id + "/cycles")
         .then(response => {
           this.cycles = response.data.results;
-console.log(this.cycles);
+
         }).catch(error => {
-          console.log(error.description); 
+          console.log(error.description);
         });
       },
       getRoutineExcercises(routineId, cycleId){
@@ -179,8 +189,36 @@ console.log(this.cycles);
           this.errorOccured = true;
         }
       },
-      cleanArrays: function(){ 
+      cleanArrays: function(){
         this.exerciseArray = [];
+
+      },
+
+      update: function() {
+        this.queryFilters="";
+        if(this.order != ""){
+          if(this.queryFilters != ""){
+            this.queryFilters = this.queryFilters + "&";
+          }
+          this.queryFilters = this.queryFilters + "orderBy=" + this.order;
+        }
+        if(this.direction != ""){
+          this.queryFilters = this.queryFilters + "&direction=" + this.direction;
+        }
+        this.queryFilters=this.queryFilters + "&size=9999"
+        console.log("this.queryfilters");
+        console.log(this.queryFilters);
+
+        this.axios
+            .get(UserApi.baseUrl + "/routines/?" + this.queryFilters)
+            .then((response) => {
+              this.routinesE = response.data.results;
+
+              for(this.i = 0; this.i < this.routinesE.length; this.i++){
+                this.routineDialog[this.i] = false;
+              }
+            })
+            .catch(() => console.log("Error al obtener los datos de rutinas"));
 
       }
     }

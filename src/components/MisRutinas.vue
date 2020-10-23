@@ -186,8 +186,6 @@ export default {
       console.log("this.queryfilters");
       console.log(this.queryFilters);
 
-  //    "?difficulty=" + this.difficulty + "&orderBy=" + this.order + "&direction=" + this.direction
-
       this.axios
           .get(UserApi.baseUrl + "/user/current/routines/?" + this.queryFilters)
           .then((response) => {
@@ -201,6 +199,24 @@ export default {
     },
 
     eliminarRutina: function (routineID) {
+      this.queryFilters = "";
+      console.log(this.order);
+      if(this.difficulty != ""){
+        this.queryFilters = this.queryFilters + "difficulty=" + this.difficulty;
+      }
+      if(this.order != ""){
+        if(this.queryFilters != ""){
+          this.queryFilters = this.queryFilters + "&";
+        }
+        this.queryFilters = this.queryFilters + "orderBy=" + this.order;
+      }
+      if(this.direction != ""){
+        this.queryFilters = this.queryFilters + "&direction=" + this.direction;
+      }
+      this.queryFilters=this.queryFilters + "&size=9999"
+      console.log("this.queryfilters");
+      console.log(this.queryFilters);
+
       this.axios
           .delete(UserApi.baseUrl + "/routines/" + routineID)
           .then((response) => {
