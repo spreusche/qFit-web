@@ -32,7 +32,7 @@
                 <v-icon>mdi-share</v-icon>
               </v-btn>
 
-              <v-btn icon v-bind="attrs">
+              <v-btn icon v-bind="attrs" to='/CrearRutina' @click="setID(routine.id)">
                 <v-icon>mdi-pencil</v-icon>
               </v-btn>
 
@@ -143,7 +143,12 @@ export default {
           this.routines = response.data.results;
           console.log(this.routines);
         });
+
+
+      },
     },
+  setID: function (num) {
+    UserApi.currID(num);
   },
 };
 </script>

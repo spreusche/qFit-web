@@ -36,6 +36,7 @@
       </v-col>
     </v-row>
 
+<!--    body of table-->
     <div class="ma-3" v-for="exercise in currentCycle" :key="exercise">
       <v-row>
 
@@ -50,9 +51,14 @@
             {{exercise.repetitions}}
           </v-card>
         </v-col>
-
       </v-row>
+
     </div>
+
+<!--    footer of table-->
+    <v-row justify="center">
+      <v-btn>+ agregar ejercicio</v-btn>
+    </v-row>
 
 
   </v-container>
@@ -61,14 +67,33 @@
 <script>
 //import {UserApi} from "@/api/user";
 
+import {UserApi} from "@/api/user";
+
 export default {
 
   data: () => ({
     title: "Entrada en Calor",
     currentCycle: [],
-    datos: "",
+    // Hardcodeado la rutina y ciclo IDs
+    routineID: 1,
+    cycleID: 1,
   }),
+
+  //cuando se entra a la pagina se hace esto :D
+  beforeMount: function () {
+    this.axios
+        .get(UserApi.baseUrl + "/routines/" + this.routineID + "/cycles/" + this.cycleID + "/exercises")
+        .then((response) => {
+          this.currentCycle = response.data.results;
+          console.log(this.currentCycle);
+          console.log("BUENARDO");
+        })
+        .catch(() => console.log("errorciño agarrando los datos de la api"));
+  },
+
+
 }
+
 </script>
 
 <style scoped>

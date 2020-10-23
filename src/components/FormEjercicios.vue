@@ -31,12 +31,10 @@
       <v-row align="center">
           <v-btn
           color="grey lighten-2" elevation="3"
-          to="/CrearRutina/Ejercicios"
+          :to=this.path
           width="94%">
           Ejercicios
           </v-btn>
-
-        <v-btn @click="test">qweqweqwe</v-btn>
 
       </v-row>
     </v-container>
@@ -53,6 +51,8 @@ export default {
 
      props: {
     name: String,
+    path: String,
+
   },
 
     data: () => ({
@@ -68,6 +68,7 @@ export default {
         v => !!v || '*'
     ]
     }),
+
 
   methods: {
       createCycle: function(id, theType, ornen){
@@ -86,14 +87,12 @@ export default {
             })
             .then((response) => {
               console.log(response);
+              console.log("routine id:");
               console.log(id);
-              console.log(ornen);
+              console.log("cicle id:");
+              console.log(response.data.id);
             })
       },
-
-    test: function(){
-        console.log("123");
-    }
   }
 
 }

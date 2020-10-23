@@ -3,7 +3,7 @@
     <v-row>
 
       <div>
-        <h1>Crear/Editar Rutina</h1>
+        <h1>Crear Rutina</h1>
       </div>
 
       <v-spacer></v-spacer>
@@ -68,21 +68,21 @@
       <v-col>
         <v-card>
           <v-card-title class="justify-center">ENTRADA EN CALOR</v-card-title>
-          <FormEjercicios name="ENTRADA EN CALOR" ref="calor"></FormEjercicios>
+          <FormEjercicios name="ENTRADA EN CALOR" ref="calor" path="/Ejercicios/calor"></FormEjercicios>
         </v-card>
       </v-col>
 
       <v-col>
         <v-card>
           <v-card-title class="justify-center">EJERCITACIÓN PRINCIPAL</v-card-title>
-          <FormEjercicios name="EJERCITACIÓN PRINCIPAL" ref="ppal"></FormEjercicios>
+          <FormEjercicios name="EJERCITACIÓN PRINCIPAL" ref="ppal" path="/Ejercicios/ppal"></FormEjercicios>
         </v-card>
       </v-col>
 
       <v-col>
         <v-card>
           <v-card-title class="justify-center">ENFRIAMIENTO</v-card-title>
-          <FormEjercicios name="ENFRIAMIENTO" ref="frio"></FormEjercicios>
+          <FormEjercicios name="ENFRIAMIENTO" ref="frio" path="/Ejercicios/frio"></FormEjercicios>
         </v-card>
       </v-col>
     </v-row>
