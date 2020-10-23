@@ -138,8 +138,16 @@ export default {
     };
   },
   beforeCreate: function () {
+
+    if(this.$route.params.query != null){
+      this.queryFilters = "search=" + this.$route.params.query;
+      console.log(this.queryFilters);
+    } else {
+      this.queryFilters = "";
+    }
+
         this.axios
-        .get(UserApi.baseUrl + "/routines/")
+        .get(UserApi.baseUrl + "/routines/?" + this.queryFilters)
         .then((response) => {
             this.routinesE = response.data.results;
 
@@ -196,6 +204,15 @@ export default {
 
       update: function() {
         this.queryFilters="";
+
+        if(this.$route.params.query != null){
+          this.queryFilters = "search=" + this.$route.params.query;
+          console.log(this.queryFilters);
+        } else {
+          this.queryFilters = "";
+        }
+
+
         if(this.order != ""){
           if(this.queryFilters != ""){
             this.queryFilters = this.queryFilters + "&";

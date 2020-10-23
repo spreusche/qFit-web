@@ -24,9 +24,7 @@
       <v-col>
         <v-text-field
           append-icon="mdi-magnify"
-          @click:append="router.push({ name: 'user', params: { userId } })"
-
-          @click.native="$router.push('/endreco/test')"
+          @click:append="buscar"
           v-model="query"
           flat
           dense
@@ -79,7 +77,46 @@ export default {
       console.log("cosa:");
       console.log(this.query);
     },
-    getCurrentData: function () {
+
+    buscar: function(){
+      this.$router.push({ name: 'searchExplorar', params: { query:  this.query } });
+      location.reload();
+    },
+
+    save(date) {
+      this.$refs.menu.save(date);
+    },
+
+    getCurrent: function () {
+      this.axios
+        .get(UserApi.baseUrl + "/user/current")
+        .then((response) => {
+          return response.data.username;
+        })
+        .catch((error) => console.log(error));
+    },
+
+    logOut: function () {
+      this.axios
+        .post(UserApi.baseUrl + "/user/logout")
+        .then(localStorage.clear())
+        .catch((error) => console.log(error));
+    },
+    changeData: function () {
+      this.axios
+        .put(UserApi.baseUrl + "/user/current", {
+          username: this.username,
+          fullName: this.name + '' + this.lastName,
+          gender: "male",
+          birthdate: 284007600000,
+          email: this.email,
+          phone: this.contact,
+          avatarUrl: this.avatarUrl,
+        })
+        .then(console.log("si"))
+        .catch((error) => console.log(error));
+    },
+    updateData: function () {
       this.axios
         .get(UserApi.baseUrl + "/user/current")
         .then((response) => {
