@@ -96,12 +96,6 @@ export default {
         .catch((error) => console.log(error));
     },
 
-    logOut: function () {
-      this.axios
-        .post(UserApi.baseUrl + "/user/logout")
-        .then(localStorage.clear())
-        .catch((error) => console.log(error));
-    },
     changeData: function () {
       this.axios
         .put(UserApi.baseUrl + "/user/current", {
