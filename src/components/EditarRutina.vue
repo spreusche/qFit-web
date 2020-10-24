@@ -22,6 +22,8 @@
     </v-row>
 
     <v-divider></v-divider>
+    <v-card flat>{{warning}}</v-card>
+
     <v-row>
       <v-col>
 
@@ -79,19 +81,10 @@
               </v-col>
 
 
-              <v-col cols="8">
-                <v-select :items="categories" label="Categorías" dense outlined v-model="category" item-text="name" item-value="id"></v-select>
-              </v-col>
+            <v-col cols="8">
+              <v-select :items="categories" label="Categorías" dense outlined v-model="category" item-text="name" item-value="id"></v-select>
+            </v-col>
 
-          </v-row>
-
-          <v-row>
-              <v-col cols="3">
-                <v-header><h3>Deportes:</h3></v-header>
-              </v-col>
-              <v-col cols="8">
-                <v-text-field outlined v-model="materials"></v-text-field>
-              </v-col>
           </v-row>
 
           <v-row>
@@ -110,8 +103,6 @@
     </v-row>
 
     <v-divider></v-divider>
-
-    <v-card flat>{{warning}}</v-card>
     <v-divider></v-divider>
 
     <v-row>
@@ -162,7 +153,7 @@
      categories: [],
      category: null,
      difficulties: [
-       {id:"", spanish:""}, {id:"rookie", spanish:"Novato"}, {id:"begginer", spanish:"Principiante"}, {id:"intermediate", spanish:"Intermedio"}, {id:"advanced", spanish:"Avanzado"}, {id:"expert", spanish:"Experto"}
+       {id:"rookie", spanish:"Novato"}, {id:"begginer", spanish:"Principiante"}, {id:"intermediate", spanish:"Intermedio"}, {id:"advanced", spanish:"Avanzado"}, {id:"expert", spanish:"Experto"}
      ],
      difficulty: "",
      i: 0,
@@ -185,7 +176,7 @@
         this.title="Editar Rutina";
      } else {
        this.title = "Crear Rutina";
-       this.warning="No olvide guardar la rutina antes de empezar a agregarle ejercicios";
+       this.warning="No olvide crear (guardar) la rutina antes de empezar a agregarle ejercicios";
      }
      this.axios
      .get(UserApi.baseUrl + "/categories")
