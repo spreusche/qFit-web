@@ -65,7 +65,7 @@
                   >
                     <template v-slot:activator="{ on, attrs }">
                       <v-text-field
-                          v-model="date"
+                          v-model="birthdate"
                           label="Fecha de nacimiento"
                           readonly
                           filled
@@ -76,7 +76,7 @@
                     <v-date-picker
                         ref="picker"
                         locale="es"
-                        v-model="date"
+                        v-model = 'birthdate'
                         :max="new Date().toISOString().substr(0, 10)"
                         min="1950-01-01"
                         @change="save"
@@ -112,12 +112,12 @@ import {UserApi} from "@/api/user";
 export default {
   data: () => ({
     dialog: false,
-    date: null,
+    date: new Date('01/01/2019'),
     menu: false,
     name: "",
     lastName: "",
     username: "",
-    birthdate: 0,
+    birthdate: "",
     contact: "",
     gender: "",
   }),
@@ -132,6 +132,7 @@ export default {
   methods: {
     save(date) {
       this.$refs.menu.save(date);
+      console.log(date);
 
     },
     changeData: function () {
@@ -140,7 +141,7 @@ export default {
             username: this.username,
             fullName: this.name + '&' + this.lastName,
             gender: "male",
-            birthdate: 284007600000,
+            birthdate: new Date (this.birthdate).getTime(),
             email: this.email,
             phone: this.contact,
             avatarUrl: this.avatarUrl,
@@ -156,7 +157,7 @@ export default {
             let fullname = response.data.fullName.split("&");
             this.name = fullname[0];
             this.lastName = fullname[1];
-            this.birthdate = response.data.birthdate;
+            this.birthdate = new Date(response.data.birthdate).toISOString().substring(0,10);
             this.email = response.data.email;
             this.contact = response.data.phone;
             this.avatarUrl = response.data.avatarUrl;

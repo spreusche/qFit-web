@@ -41,7 +41,7 @@
       <v-menu offset-y>
         <template v-slot:activator="{ on, attrs }">
           <v-btn icon v-bind="attrs" v-on="on">
-            <v-icon>mdi-account-circle</v-icon>
+            <v-avatar> <img :src = 'getAvatarUrl()' :alt = "require('../assets/logo-qfit.png')"></v-avatar>
           </v-btn>
         </template>
         <v-list>
@@ -86,30 +86,6 @@ export default {
     save(date) {
       this.$refs.menu.save(date);
     },
-
-    getCurrent: function () {
-      this.axios
-        .get(UserApi.baseUrl + "/user/current")
-        .then((response) => {
-          return response.data.username;
-        })
-        .catch((error) => console.log(error));
-    },
-
-    changeData: function () {
-      this.axios
-        .put(UserApi.baseUrl + "/user/current", {
-          username: this.username,
-          fullName: this.name + ' ' + this.lastName,
-          gender: "male",
-          birthdate: 284007600000,
-          email: this.email,
-          phone: this.contact,
-          avatarUrl: this.avatarUrl,
-        })
-        .then(console.log("si"))
-        .catch((error) => console.log(error));
-    },
     updateData: function () {
       this.axios
         .get(UserApi.baseUrl + "/user/current")
@@ -124,10 +100,13 @@ export default {
           .post(UserApi.baseUrl + "/user/logout")
           .then(void localStorage.clear())
           .catch((error) => console.log(error));
+    },
+    getAvatarUrl: function (){
+      return this.avatarUrl;
     }
   },
   created() {
-    this.getCurrentData();
+    this.updateData();
   }
 };
 </script>
