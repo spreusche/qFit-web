@@ -43,9 +43,6 @@
           <p>{{ routine.detail }}</p>
           <h3>Duración:</h3>
           <p>{{ routine.duracion }}</p>
-
-          <h3>Materiales:</h3>
-          <p>{{ routine.difficulty }}</p>
         </v-card-text>
       </v-card>
     </div>
@@ -148,8 +145,7 @@ export default {
   beforeCreate: function () {
 
     if(this.$route.params.query != null){
-      this.queryFilters = "search=" + this.$route.params.query;
-      console.log(this.queryFilters);
+      this.queryFilters = "search=" + this.$route.params.query;7
     } else {
       this.queryFilters = "";
     }
@@ -214,8 +210,7 @@ export default {
         this.queryFilters="";
 
         if(this.$route.params.query != null){
-          this.queryFilters = "search=" + this.$route.params.query;
-          console.log(this.queryFilters);
+          this.queryFilters = "search=" + this.$route.params.query;7
         } else {
           this.queryFilters = "";
         }
@@ -230,9 +225,7 @@ export default {
         if(this.direction != ""){
           this.queryFilters = this.queryFilters + "&direction=" + this.direction;
         }
-        this.queryFilters=this.queryFilters + "&size=9999"
-        console.log("this.queryfilters");
-        console.log(this.queryFilters);
+        this.queryFilters=this.queryFilters + "&size=9999";
 
         this.axios
             .get(UserApi.baseUrl + "/routines/?" + this.queryFilters)

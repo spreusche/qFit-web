@@ -62,7 +62,7 @@
 
 <script>
 import { UserApi } from "@/api/user";
-import PerfilUsuario from "@/components/PerfilUsuario"; 
+import PerfilUsuario from "@/components/PerfilUsuario";
 export default {
   components: {PerfilUsuario},
   data: () => ({
@@ -74,7 +74,6 @@ export default {
   methods: {
 
     logg: function(){
-      console.log("cosa:");
       console.log(this.query);
     },
 

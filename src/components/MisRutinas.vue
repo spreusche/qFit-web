@@ -92,8 +92,6 @@
               {{ routine.averageRating }}
               <h3>Duración:</h3>
               {{ routine.duracion }}
-              <h3>Materiales:</h3>
-              -
               <h3>Dificultad:</h3>
               {{ routine.difficulty }}
               <h3>ID:</h3>
@@ -163,7 +161,6 @@ export default {
     this.axios
       .get(UserApi.baseUrl + "/user/current/routines/?size=9999")
       .then((response) => {
-        console.log(response.data.results);
         this.routines = response.data.results;
       })
       .catch(() => console.log("errorciño agarrando los datos de la api"));
@@ -174,7 +171,6 @@ export default {
     //update routines
     update: function () {
       this.queryFilters = "";
-      console.log(this.order);
       if(this.difficulty != ""){
         this.queryFilters = this.queryFilters + "difficulty=" + this.difficulty;
       }
@@ -188,16 +184,11 @@ export default {
         this.queryFilters = this.queryFilters + "&direction=" + this.direction;
       }
       this.queryFilters=this.queryFilters + "&size=9999"
-      console.log("this.queryfilters");
-      console.log(this.queryFilters);
 
       this.axios
           .get(UserApi.baseUrl + "/user/current/routines/?" + this.queryFilters)
           .then((response) => {
-            console.log(this.routines);
             this.routines = response.data.results;
-            console.log(this.routines);
-            console.log("updateado");
           });
 
 

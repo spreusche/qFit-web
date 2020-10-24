@@ -283,7 +283,6 @@ export default {
         .then(response => {
           localStorage.setItem("token",response.data.token);
           UserApi.token = response.data.token;
-          console.log(localStorage.getItem("token"));
           this.axios.defaults.headers.common[
             "Authorization"
           ] = `bearer ${localStorage.getItem("token")}`;
@@ -291,7 +290,6 @@ export default {
           router.push({ name: "Explorar" });
         })
         .catch(error => {
-          console.log(error.response.data.code);
           if(error.response.data.code == 4){
             this.snackBar_credencialesIncorrectas = true;
           }else if(error.response.data.code == 8){

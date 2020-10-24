@@ -61,14 +61,6 @@
               </v-col>
             </v-row>
 
-            <v-row>
-              <v-col cols="4">
-                <v-header><h3>Materiales:</h3></v-header>
-              </v-col>
-              <v-col cols="8">
-                <v-text-field outlined v-model="materials"></v-text-field>
-              </v-col>
-            </v-row>
           </v-form>
         </v-card>
       </v-col>
@@ -144,7 +136,6 @@
      valid: true,
      name: "",
      description: "",
-     materials: "",
      rules: [(v) => !!v || "Debes completar la información"],
      select: null,
      title: "",
@@ -167,10 +158,9 @@
        this.axios
            .get(UserApi.baseUrl + "/routines/" + this.id)
            .then((response) => {
-             console.log(response.data);
              this.name = response.data.name;
              this.description = response.data.detail;
-             this.materials = response.data.difficulty;
+             this.difficulty = response.data.difficulty;
            })
            .catch(() => console.log("errorciño agarrando los datos de la api"));
         this.title="Editar Rutina";
@@ -185,8 +175,6 @@
        for(this.i = 0; this.i < response.data.results.length; this.i++){
          this.categories[this.i] = response.data.results[this.i]; //.name;
        }
-       console.log("categorias:");
-       console.log(this.categories);
      })
    },
 
@@ -207,20 +195,10 @@
              })
              .then((response) => {
                console.log(response);
-               this.axios
-               .get(UserApi.baseUrl + "/routines/" + this.id + "/cycles/")
-               .then((response) => {
-                 console.log("poop")
-                 console.log(response.data.totalCount);
-                 console.log(response);
-                 console.log(this.id);
                  this.$refs.calor.createCycle(this.id, "warmup", 1);
                  this.$refs.ppal.createCycle(this.id, "exercise", 2);
                  this.$refs.frio.createCycle(this.id, "cooldown", 3);
                  alert("Rutina editada");
-
-               })
-
              })
        } else {
          //else posteá la nueva rutina y ciclo
@@ -235,9 +213,6 @@
                }
              })
              .then((response) => {
-               console.log("san");
-               console.log(response.data.id);
-               console.log("guchito");
                this.$refs.calor.createCycle(response.data.id, "warmup", 1);
                this.$refs.ppal.createCycle(response.data.id, "exercise", 2);
                this.$refs.frio.createCycle(response.data.id, "cooldown", 3);

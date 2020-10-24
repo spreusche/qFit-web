@@ -165,7 +165,6 @@ export default {
     this.axios
     .get(UserApi.baseUrl + "/routines/1/cycles/1/exercises")
     .then((response) => {
-      console.log(response.data.results);
       this.routines=response.data.results;
     })
 
@@ -198,12 +197,9 @@ export default {
     },
 
     fillBoxes: function(){
-      console.log("entré a fillboxes");
       this.axios
       .get(UserApi.baseUrl + "/routines/" + this.$route.params.routineID + "/cycles/" + this.$route.params.cycleID + "/exercises/" + this.$route.params.exerciseID)
       .then((response) => {
-        console.log("respuestaaaaaaaaaaa");
-        console.log(response.data);
         this.name=response.data.name;
         this.detail=response.data.detail;
         this.type=response.data.type;
@@ -212,16 +208,7 @@ export default {
       })
     },
 
-    printProps: function() {
-      console.log("routineID:");
-      console.log(this.routineID);
-      console.log("cycleID:");
-      console.log(this.cycleID);
-    },
-
-    guardar: function() {
-      console.log("entré")
-
+    guardar: function() {7
       if(this.$route.params.exerciseID == null) {
         this.axios
             .post(UserApi.baseUrl + "/routines/" + this.routineID + "/cycles/" + this.cycleID + "/exercises/", {
@@ -231,9 +218,6 @@ export default {
               //estos dos de abajo son los obligatorios
               duration: parseInt(this.duration),
               repetitions: parseInt(this.repetitions),
-            })
-            .then((response) => {
-              console.log(response);
             }).catch(() => console.log("errorciño agregando el ejercicio"));
         //y ahora la agrego al masterCycle también
         this.axios
@@ -244,9 +228,6 @@ export default {
               //estos dos de abajo son los obligatorios
               duration: parseInt(this.duration),
               repetitions: parseInt(this.repetitions),
-            })
-            .then((response) => {
-              console.log(response);
             }).catch(() => console.log("errorciño agregando al mastercycle"));
       } else {
         this.axios
@@ -257,9 +238,6 @@ export default {
               //estos dos de abajo son los obligatorios
               duration: parseInt(this.duration),
               repetitions: parseInt(this.repetitions),
-            })
-            .then((response) => {
-              console.log(response);
             }).catch(() => console.log("errorciño editando el ejercicio"));
       }
       alert("Ejercicio Guardado");

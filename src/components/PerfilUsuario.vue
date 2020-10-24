@@ -49,6 +49,7 @@
                 <v-col>
                   <v-text-field
                       label="Usuario"
+                      disabled
                       required
                       filled
                       v-model="username"
@@ -132,7 +133,6 @@ export default {
   methods: {
     save(date) {
       this.$refs.menu.save(date);
-      console.log(date);
 
     },
     changeData: function () {

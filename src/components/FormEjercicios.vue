@@ -72,31 +72,8 @@ export default {
     ]
     }),
 
- // beforeMount: function () {
- //   this.id=this.$route.params.id;
-
- //    if(this.pageNum != -1) {
- //      //si no es create new, agarrá los datos y metelos al form
- //      this.axios
- //          .get(UserApi.baseUrl + "/routines/" + this.id + "/cycles/")
- //          .then((response) => {
- //            console.log(response.data.results);
-    //         this.description = response.data.detail;
-    //         this.materials = response.data.difficulty;
-    //       })
-    //       .catch(() => console.log("errorciño agarrando los datos de la api"));
-    //   this.title="Editar Rutina";
-    // } else {
-    //   this.title = "Crear Rutina";
- //   }
- // },
-
   methods: {
     createCycle: function (id, theType, ornen) {
-      console.log("holaaa");
-
-//      if (this.id != -1) {
-//estas en create new
         this.axios
             .post(UserApi.baseUrl + "/routines/" + id + "/cycles", {
               name: this.name,
@@ -107,12 +84,7 @@ export default {
 
             })
             .then((response) => {
-              console.log(response);
-              console.log("routine id:");
-              console.log(id);
               this.routineID = id;
-              console.log("cycle id:");
-              console.log(response.data.id);
               this.cycleID = response.data.id;
             })
     },
@@ -121,9 +93,6 @@ export default {
       this.id=newNumber;
     },
 
-    logg: function () {
-      console.log(this.$route.params.id);
-    }
   }
 };
 </script>

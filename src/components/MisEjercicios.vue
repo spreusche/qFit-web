@@ -107,9 +107,6 @@ export default {
   },
 
   methods: {
-    logg: function (text) {
-      console.log(text);
-    },
     update: function () { //esto se tiene que correr una vez despues de que se carga la pagina para que carguen las imagenes
       this.axios
           //routine 1 cycle 1 tiene los ejs
@@ -126,10 +123,7 @@ export default {
       if (this.result) {
         this.axios
             .delete(UserApi.baseUrl + "/routines/1/cycles/1/exercises/" + exerciseID)
-            .then((response) => {
-              console.log(response);
               this.update();
-            })
       }
     },
 
@@ -139,7 +133,6 @@ export default {
           .get(UserApi.baseUrl + "/routines/1/cycles/1/exercises/" + id + "/images")
           .then((response) => {
             this.imgs[id-1]=response.data.results[0].url;
-            console.log(this.imgs);
           })
     }
 

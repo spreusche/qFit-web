@@ -121,11 +121,6 @@ export default {
 
   methods: {
 
-
-    loggg: function () {
-      console.log("masvale");
-    },
-
     editExercise(exerciseID){
       this.$router.push({ name: 'EditarEjercicio', params: { routineID: this.routineID, cycleID: this.cycleID, exerciseID: exerciseID } });
     },
@@ -148,9 +143,6 @@ export default {
         .get(UserApi.baseUrl + "/routines/" + this.routineID + "/cycles/" + this.cycleID + "/exercises/"
         )
         .then((response) => {
-          console.log(this.$route.params);
-          console.log(this.cycleIDs[this.number - 1]);
-          console.log(response.data.results);
           this.currentCycle = response.data.results;
         });
     },
