@@ -5,9 +5,10 @@ import vuetify from './plugins/vuetify';
 import axios from 'axios'
 import VueAxios from 'vue-axios'
 import VueCookie from 'vue-cookie'
+import Clipboard from 'v-clipboard'
 
 
-Vue.use(VueAxios, axios,VueCookie);
+Vue.use(VueAxios, axios,VueCookie, Clipboard);
 
 Vue.config.productionTip = false
 

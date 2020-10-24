@@ -41,14 +41,12 @@
           <v-card-actions>
             <v-spacer></v-spacer>
 
-            <v-btn icon v-bind="attrs">
-
-              <!--                  :to="{name:'CrearEjercicio', params: { routineID: , cycleID: }}"-->
+            <v-btn icon v-bind="attrs" :to="{name:'EditarEjercicio', params: { routineID: 1, cycleID: 1, exerciseID: exercise.id}}">
               <v-icon
               >mdi-pencil</v-icon>
             </v-btn>
 
-            <v-btn icon v-bind="attrs" color="red">
+            <v-btn icon v-bind="attrs" color="red" @click="deleteExercise(exercise.id)">
               <v-icon>mdi-delete</v-icon>
             </v-btn>
           </v-card-actions>
@@ -93,6 +91,7 @@ export default {
   }),
   //cuando se entra a la pagina se hace esto :D
   beforeMount: function () {
+    //routine 1 cycle 1 es el master cycle
     this.axios
         .get(UserApi.baseUrl + "/routines/1/cycles/1/exercises")
         .then((response) => {
@@ -122,6 +121,18 @@ export default {
             console.log("BUENARDO2");
           })
           .catch(() => console.log("errorciño agarrando los datos de la api"));
+    },
+
+    deleteExercise(exerciseID){
+      this.result = window.confirm("Está seguro que desea eliminar esta rutina?");
+      if (this.result) {
+        this.axios
+            .delete(UserApi.baseUrl + "/routines/1/cycles/1/exercises/" + exerciseID)
+            .then((response) => {
+              console.log(response);
+              this.update();
+            })
+      }
     },
 
     getImage: function (id) {

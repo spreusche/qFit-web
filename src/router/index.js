@@ -58,6 +58,15 @@ const routes = [
     component: CrearEjercicio,
     meta: {requiresAuth:true}
   },
+
+  {
+    //los ids para ver en donde se va a guardar el ej
+    path: '/MisEjercicios/EditarEjercicio/:routineID/:cycleID/:exerciseID',
+    name: 'EditarEjercicio',
+    component: CrearEjercicio,
+    meta: {requiresAuth:true}
+  },
+
   {
     //id es la rutina, num es si es entrada en calor ppal o cooldown, y con esos dos podes sacar el cycleID
     path: '/TablaEjercicios/:id/:num',

@@ -53,7 +53,7 @@
           <v-col>
             <v-card-actions class="pt-0">
               <v-spacer></v-spacer>
-              <v-btn icon v-bind="attrs" color="blue" @click="update">
+              <v-btn icon v-bind="attrs" color="blue" @click="copy">
                 <v-icon>mdi-share</v-icon>
               </v-btn>
 
@@ -156,7 +156,7 @@ export default {
   }), //cuando se entra a la pagina se hace esto :D Y ME FUNKA BIEN
   beforeMount: function () {
     this.axios
-      .get(UserApi.baseUrl + "/user/current/routines/?size=10")
+      .get(UserApi.baseUrl + "/user/current/routines/?size=9999")
       .then((response) => {
         console.log(response.data.results);
         this.routines = response.data.results;
@@ -199,30 +199,24 @@ export default {
     },
 
     eliminarRutina: function (routineID) {
-      this.queryFilters = "";
-      console.log(this.order);
-      if(this.difficulty != ""){
-        this.queryFilters = this.queryFilters + "difficulty=" + this.difficulty;
-      }
-      if(this.order != ""){
-        if(this.queryFilters != ""){
-          this.queryFilters = this.queryFilters + "&";
-        }
-        this.queryFilters = this.queryFilters + "orderBy=" + this.order;
-      }
-      if(this.direction != ""){
-        this.queryFilters = this.queryFilters + "&direction=" + this.direction;
-      }
-      this.queryFilters=this.queryFilters + "&size=9999"
-      console.log("this.queryfilters");
-      console.log(this.queryFilters);
 
-      this.axios
-          .delete(UserApi.baseUrl + "/routines/" + routineID)
-          .then((response) => {
-            console.log(response);
-            this.update();
-          })
+      this.result = window.confirm("Está seguro que desea eliminar esta rutina?");
+      if (this.result) {
+        if(routineID != 1) {
+          this.axios
+              .delete(UserApi.baseUrl + "/routines/" + routineID)
+              .then((response) => {
+                console.log(response);
+                this.update();
+              })
+        } else {
+          alert("no se puede borrar la rutina 1, ésta contiene el masterCycle");
+        }
+      }
+    },
+
+    copy: function() {
+      this.$clipboard("You can copy stuff to the Clipboard by clicking on any element, like an image");
     },
 
     setID: function (num) {

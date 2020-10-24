@@ -57,7 +57,7 @@ export default {
   },
 
     data: () => ({
-      repeticiones:'',
+      repeticiones: 1,
       descansoRep: '',
       descansoEj: '',
       valid: true,

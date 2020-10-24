@@ -7,8 +7,9 @@
       </div>
 
       <v-spacer></v-spacer>
-      <!--          @click="editRoutine" -->
-      <v-btn color="error" @click=$router.go(-1)> ATRÁS </v-btn>
+      <!--  debaja porque entra en un loop @click=$router.go(-1)  -->
+      <v-btn color="error" :to="{name:'MisRutinas'}" > ATRÁS </v-btn>
+
       <v-btn
 
           @click="this.editRoutine"
@@ -27,7 +28,7 @@
         <v-card elevation="0">
           <v-form ref="form" v-model="valid" lazy-validation>
             <v-row>
-              <v-col cols="3">
+              <v-col cols="4">
                 <v-header><h3>Nombre:</h3></v-header>
               </v-col>
               <v-col cols="8">
@@ -42,7 +43,7 @@
             </v-row>
 
             <v-row>
-              <v-col cols="3">
+              <v-col cols="4">
                 <v-header><h3>Descripción:</h3></v-header>
               </v-col>
               <v-col cols="8">
@@ -59,7 +60,7 @@
             </v-row>
 
             <v-row>
-              <v-col cols="3">
+              <v-col cols="4">
                 <v-header><h3>Materiales:</h3></v-header>
               </v-col>
               <v-col cols="8">
@@ -188,6 +189,7 @@
                  this.$refs.calor.createCycle(this.id, "warmup", 1);
                  this.$refs.ppal.createCycle(this.id, "exercise", 2);
                  this.$refs.frio.createCycle(this.id, "cooldown", 3);
+                 alert("Rutina editada");
 
                })
 
@@ -214,6 +216,7 @@
                this.$refs.calor.setID(response.data.id);
                this.$refs.ppal.setID(response.data.id);
                this.$refs.frio.setID(response.data.id);
+               alert("Rutina Creada");
              })
        }
      },
