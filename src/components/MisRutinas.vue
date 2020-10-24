@@ -20,7 +20,7 @@
 
     </v-row>
 
-    <hr />
+    
     <v-row>
       <v-col cols="2">
 
@@ -34,11 +34,12 @@
         <v-select :items="ascOrDesc" label="Orden" dense outlined v-model="direction" item-text="spanish" item-value="id"></v-select>
       </v-col>
       <v-col>
-        <v-btn icon color="orange" @click="update">
+        <v-btn icon color="blue" @click="update">
           <v-icon>mdi-cached</v-icon>
         </v-btn>
       </v-col>
     </v-row>
+    <hr />
 
 
 
@@ -87,24 +88,26 @@
           <div v-show="!routine.isPublic">
             <v-divider></v-divider>
 
-            <v-card-text>
-              <h3>Rating:</h3>
-              {{ routine.averageRating }}
-              <h3>Duración:</h3>
-              {{ routine.duracion }}
-              <h3>Dificultad:</h3>
-              {{ routine.difficulty }}
-              <h3>ID:</h3>
-              {{ routine.id }}
-              <h3>Visibilidad Pública:</h3>
-              {{ routine.isPublic }}
-              <h3>Categoría:</h3>
-              {{ routine.category }}
-              <h3>Fecha de creación:</h3>
-              {{ routine.dateCreated }}
-              <h3>Contenido:</h3>
-              {{ routine.content }}
-            </v-card-text>
+            <v-list>
+              <v-list-item>
+                <h3>Rating: </h3> {{ routine.averageRating }}
+            </v-list-item>
+              <v-list-item>
+                <h3>Duración: </h3> {{ routine.duracion }}
+              </v-list-item>
+              <v-list-item>
+                <h3>Dificultad: </h3> {{ routine.difficulty }}
+              </v-list-item>
+              <v-list-item>
+                <h3>Visibilidad Pública: </h3> {{ routine.isPublic }}
+              </v-list-item>
+              <v-list-item>
+                <h3>Categoría: </h3> {{ routine.category.name }}
+              </v-list-item>
+              <v-list-item>
+                <h3>Contenido: </h3> {{ routine.content }}
+              </v-list-item>
+            </v-list>
           </div>
         </v-expand-transition>
       </v-card>
@@ -133,30 +136,7 @@ export default {
     queryFilters: "",
     routines: [],
     flag: -1,
-    //     [
-    //   {
-    //     name: "Rutina de Brazos",
-    //     source: "https://fondosmil.com/fondo/4045.jpg",
-    //     content: "10 flexiones de brazo",
-    //     duracion: "1 hora",
-    //     detail: "Te dejará los brazos mas explosivos de todo el barrio",
-    //     text: "felxiones de brazos: 10 reps",
-    //     show: false,
-    //   },
-    //   {
-    //     name: "Rutina 2",
-    //     source:
-    //       "https://c.wallhere.com/photos/14/73/women_sportswear_ass_gloves_gyms_mirror_dumbbells_tanned-1158628.jpg!d",
-    //     content: "cont 2",
-    //     duracion: "2 horas",
-    //     detail: "detail 2",
-    //     text: "texto 2",
-    //     show: false,
-    //   },
-    //   // rutina 3 va a ser agarrada de la nube:
-    //   {},
-    // ],
-  }), //cuando se entra a la pagina se hace esto :D Y ME FUNKA BIEN
+  }),
   beforeMount: function () {
     this.axios
       .get(UserApi.baseUrl + "/user/current/routines/?size=9999")

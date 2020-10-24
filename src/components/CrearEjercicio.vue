@@ -3,13 +3,14 @@
    <v-row>
 
       <div class="ml-3">
-        <h1>Crear Ejercicio</h1>
+        <h1>Crear Ejercicio o </h1>
       </div>
 
-     <v-spacer></v-spacer>
 
      <v-btn @click="openPopUp"
             color="blue"
+            class="ml-3"
+            elevation="2"
             dark >
        Tomar uno existente
      </v-btn>
@@ -84,33 +85,8 @@
                 ></v-textarea>
               </v-col>
             </v-row>
-
+            
             <v-row>
-              <v-col cols="3">
-                <v-header><h3>Duración:</h3></v-header>
-              </v-col>
-              <v-col cols="8">
-                <v-text-field outlined v-model="duration" :rules="numberRules"></v-text-field>
-              </v-col>
-            </v-row>
-
-            <v-row>
-              <v-col cols="3">
-                <v-header><h3>Repeticiones:</h3></v-header>
-              </v-col>
-              <v-col cols="8">
-                <v-text-field outlined v-model="repetitions" :rules="numberRules"></v-text-field>
-              </v-col>
-            </v-row>
-
-          </v-form>
-        </v-card>
-      </v-col>
-
-      <v-col>
-        <v-card elevation="0">
-        <v-card-title>Demostración</v-card-title>
-          <v-row>
               <v-col cols="3">
                 <v-header><h3>Tipo:</h3></v-header>
               </v-col>
@@ -119,14 +95,36 @@
               </v-col>
           </v-row>
 
+           
+
+           
+
+          </v-form>
+        </v-card>
+      </v-col>
+
+      <v-col>
+        <v-card elevation="0">
+
+          
+
           <v-row>
               <v-col cols="3">
-                <v-header><h3>Deportes:</h3></v-header>
+                <v-header><h3>Duración:</h3></v-header>
               </v-col>
               <v-col cols="8">
-                <v-text-field outlined v-model="materials"></v-text-field>
+                <v-text-field outlined v-model="duration" :rules="numberRules"></v-text-field>
               </v-col>
             </v-row>
+             <v-row>
+              <v-col cols="3">
+                <v-header><h3>Repeticiones:</h3></v-header>
+              </v-col>
+              <v-col cols="8">
+                <v-text-field outlined v-model="repetitions" :rules="numberRules"></v-text-field>
+              </v-col>
+            </v-row>
+
 
         </v-card>
       </v-col>

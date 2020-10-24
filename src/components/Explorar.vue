@@ -8,7 +8,6 @@
       </v-col>
     </v-row>
 
-    <hr/>
 
     <v-row>
       <v-col cols="2">
@@ -23,11 +22,13 @@
         <v-select :items="ascOrDesc" label="Orden" dense outlined v-model="direction" item-text="spanish" item-value="id"></v-select>
       </v-col>
       <v-col>
-        <v-btn icon color="orange" @click="update">
+        <v-btn icon color="blue" @click="update">
           <v-icon>mdi-cached</v-icon>
         </v-btn>
       </v-col>
     </v-row>
+
+    <hr/>
 
 <div v-if="routinesE && routinesE.length > 0">
     <div class="ma-3" v-for="(routine, index) in routinesE" :key="index">
