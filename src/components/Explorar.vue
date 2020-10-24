@@ -55,7 +55,7 @@
         <div v-if="routinesE && routinesE.length > 0">
                     <v-card>
                       <v-app-bar flat dark color="#2d2d2a">
-                        <v-toolbar-title> <h1>{{ routinesE[this.index].name.substr(0, routinesE[this.index].name.indexOf('&')) }} </h1> </v-toolbar-title>
+                        <v-toolbar-title> <h1>{{ routinesE[this.index].name }} </h1> </v-toolbar-title>
                       </v-app-bar>
 
                       <v-card-title>
