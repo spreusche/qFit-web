@@ -41,7 +41,9 @@
       <v-menu offset-y>
         <template v-slot:activator="{ on, attrs }">
           <v-btn icon v-bind="attrs" v-on="on">
-            <v-avatar> <img :src = 'getAvatarUrl()' :alt = "require('../assets/logo-qfit.png')"></v-avatar>
+            <v-avatar>
+              <img :src = 'getAvatarUrl()' :alt = "require('../assets/account.png')">
+            </v-avatar>
           </v-btn>
         </template>
         <v-list>
@@ -49,7 +51,7 @@
             <v-list-item-title><h3>{{ username }}</h3></v-list-item-title>
           </v-list-item>
           <PerfilUsuario></PerfilUsuario>
-          <v-list-item to="/" @click="logOut()">
+          <v-list-item  to='/' @click="logOut()">
             <v-list-item-title>Cerrar Sesión</v-list-item-title>
           </v-list-item>
         </v-list>
@@ -98,7 +100,8 @@ export default {
     logOut: function () {
       this.axios
           .post(UserApi.baseUrl + "/user/logout")
-          .then(void localStorage.clear())
+          .then( localStorage.clear(),
+          )
           .catch((error) => console.log(error));
     },
     getAvatarUrl: function (){
