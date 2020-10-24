@@ -28,7 +28,7 @@
 <div v-if="routinesE && routinesE.length > 0">
     <div class="ma-3" v-for="(routine, index) in routinesE" :key="index">
       <!-- cuando clickeo, tengo que llamar a los getters(routine.id) y luego cuando estoy dentro del dialogo, haer v-if cycles y eso tan vacios o no... -->
-      <v-card elevation="4" outlined @click="[saveIndex(index), getRoutineInfo(routine.id)]">
+      <v-card elevation="4" outlined @click="getRoutineInfo(routine.id)">
         <v-card-title>{{ routine.name }}</v-card-title>
         <v-card-subtitle>
           <v-icon>mdi-account</v-icon>
@@ -47,7 +47,7 @@
   Parece que no hay rutinas aun.
 </div>
 
-      <v-dialog  v-model="routineDialog" @click:outside="[routineDialog = !routineDialog, errorOccured = false, cleanArrays()]" width="600px">
+      <v-dialog  v-model="routineDialog" @click:outside="[routineDialog = !routineDialog]" width="600px">
         <div v-if="routinesE && routinesE.length > 0">
                     <v-card>
                       <v-app-bar flat dark color="#2d2d2a">
@@ -65,31 +65,32 @@
                         <v-card-text>
                           {{ routinesE[index].detail }}
                         </v-card-text>
-<hr/>
-                      <template v-if="!errorOccured">
+                      <hr/>
+                      
 
                       <v-card-subtitle> <h2><u>Ejercicios que encontrará en esta rutina:</u></h2></v-card-subtitle>
                           <v-list>
-                          <v-list-item v-for="(exercises, index) in exerciseArray" :key="index + 'd'">
-                            <template v-for="(exercise, index2) in exercises">
-                                                  
-                              <h3 :key="index2 + 'f'" > {{ exercise.name }}: </h3>
-                               {{ exercise.detail }}
-                              
-                            </template>
+                          <v-list-item><u>Entrada en calor:</u></v-list-item>
+
+                            <v-list-item v-for="(name, index) in entrada" :key="index">
+                                <h4>{{name}}</h4> <span>{{entradaD[index]}}</span>
+                            </v-list-item>
+
+                            <v-list-item><u>Ejercitación principal:</u></v-list-item>
+                            <v-list-item v-for="(name, index) in ppal" :key="index">
+                                <h4>{{name}}</h4> <span>{{ppalD[index]}}</span> 
+                            </v-list-item>
+
+
+                            <v-list-item><u>Enfriamiento:</u></v-list-item>
+                            <v-list-item v-for="(name, index) in enfriamiento" :key="index">
+                                 <h4>{{name}}</h4> <span>{{enfriamientoD[index]}}</span>
                           </v-list-item>
                           </v-list>
 
-                      </template>
+                      
                      
-                      <template v-else>
-                        <v-card-text>
-                        <h2 style="color:red;">
-                        OH NO! Algo salió mal al cargar esta rutina.
-                        Intentalo de nuevo.
-                      </h2> <!--Esto contempla ambos ciclos y ejercicios -->
-                        </v-card-text>
-                      </template>
+                     
 
                     </v-card>
         </div>
@@ -130,7 +131,18 @@ export default {
       exerciseArray: [],
       cycles: [],
       errorOccured: false,
-      i: 0
+      j: 0,
+
+      
+      i: 0,
+      cycleIDs: [0,0,0],
+      routineContent: [],
+      entrada: [],
+      entradaD: [],
+      ppal: [],
+      ppalD: [],
+      enfriamiento: [],
+      enfriamientoD: [],
     };
   },
   beforeCreate: function () {
@@ -146,8 +158,8 @@ export default {
         .then((response) => {
             this.routinesE = response.data.results;
 
-        for(this.i = 0; this.i < this.routinesE.length; this.i++){
-            this.routineDialog[this.i] = false;
+        for(this.j = 0; this.j < this.routinesE.length; this.j++){
+            this.routineDialog[this.j] = false;
         }
         })
         .catch(() => console.log("Error al obtener los datos de rutinas"));
@@ -156,46 +168,62 @@ export default {
 
     },
     methods:{
-      saveIndex: function(index){
+     
+     saveIndex: function(index){
               this.routineDialog = !this.routineDialog
               this.index = index;
       },
-      getRoutineCycles(id){
-        this.axios.get(UserApi.baseUrl + "/routines/" + id + "/cycles")
-        .then(response => {
-          this.cycles = response.data.results;
-
-        }).catch(error => {
-          console.log(error.description);
-        });
-      },
-      getRoutineExcercises(routineId, cycleId){
-
-        this.axios.get(UserApi.baseUrl + "/routines/" + routineId + "/cycles/" + cycleId + "/exercises")
-        .then(response => {
-          this.exerciseArray.push(response.data.results); //pongo en ejercicios[] los ejercicios correspondientes al ciclo N de una rutina M
-        }).catch(error => console.log(error.description));
-      },
       getRoutineInfo(id){
-        this.errorOccured = false;
-        this.getRoutineCycles(id);
+        this.routineDialog = !this.routineDialog
+        this.entrada = [];
+        this.ppal = [];
+        this.enfriamiento = [];
+        this.entradaD = [];
+        this.ppalD = [];
+        this.enfriamientoD = [];
+        
+        this.axios
+          //get CycleIDs
+          .get(UserApi.baseUrl + "/routines/" + id + "/cycles/")
+          .then((response) => {
+            console.log(response.data.results);
+            this.cycleIDs[0] = response.data.results[0].id;
+            this.cycleIDs[1] = response.data.results[1].id;
+            this.cycleIDs[2] = response.data.results[2].id;
+          })
+      .then((response) => {
+        console.log(response);
 
-        if(this.cycles.length > 0){
-          for(this.i = 0; this.i < this.cycles.length; this.i++){
-            this.getRoutineExcercises(id, this.cycles[this.i].id);
-          }
-        }else{
-          this.errorOccured = true;
-        }
+        this.axios
+            .get(UserApi.baseUrl + "/routines/" + id + "/cycles/" + this.cycleIDs[0] + "/exercises")
+            .then((response) => {
+              for(this.i=0 ; this.i< response.data.results.length; this.i++)
+              {
+                this.entrada = this.entrada.concat(response.data.results[this.i].name);
+                this.entradaD = this.entradaD.concat(response.data.results[this.i].description);
+              }
 
-        if(this.cycles.length <= 0){
-          this.errorOccured = true;
-        }
-      },
-      cleanArrays: function(){
-        this.exerciseArray = [];
-
-      },
+        this.axios
+            .get(UserApi.baseUrl + "/routines/" + id + "/cycles/" + this.cycleIDs[1] + "/exercises")
+            .then((response) => {
+              for(this.i=0 ; this.i< response.data.results.length; this.i++)
+              {
+                this.ppal = this.ppal.concat(response.data.results[this.i].name);
+                this.ppalD = this.ppalD.concat(response.data.results[this.i].description);
+              }
+            });
+        this.axios
+            .get(UserApi.baseUrl + "/routines/" + id + "/cycles/" + this.cycleIDs[2] + "/exercises")
+            .then((response) => {
+              for(this.i=0 ; this.i< response.data.results.length; this.i++)
+              {
+                this.enfriamiento = this.enfriamiento.concat(response.data.results[this.i].name);
+                this.enfriamientoD = this.enfriamientoD.concat(response.data.results[this.i].description);
+              }
+            });
+        });
+      })
+    },
 
       update: function() {
         this.queryFilters="";

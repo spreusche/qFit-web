@@ -45,7 +45,7 @@
           </v-btn>
         </template>
         <v-list>
-          <v-list-item>
+          <v-list-item >
             <v-list-item-title><h3>{{ username }}</h3></v-list-item-title>
           </v-list-item>
           <PerfilUsuario></PerfilUsuario>
