@@ -41,9 +41,7 @@
       <v-menu offset-y>
         <template v-slot:activator="{ on, attrs }">
           <v-btn icon v-bind="attrs" v-on="on">
-            <v-avatar>
-              <img :src = 'getAvatarUrl()' :alt = "require('../assets/account.png')">
-            </v-avatar>
+            <v-icon>mdi-account</v-icon>
           </v-btn>
         </template>
         <v-list>
@@ -93,7 +91,6 @@ export default {
         .get(UserApi.baseUrl + "/user/current")
         .then((response) => {
           this.username = response.data.username;
-          this.avatarUrl = response.data.avatarUrl;
         })
         .catch((error) => console.log(error));
     },
@@ -105,9 +102,6 @@ export default {
             this.$router.push('/');
           })
           .catch((error) => console.log(error));
-    },
-    getAvatarUrl: function (){
-      return this.avatarUrl;
     }
   },
   created() {

@@ -102,6 +102,24 @@
                                       ></v-text-field>
                                     </v-row>
                                     <v-row>
+                                      <v-text-field
+                                          v-model="confirmPassword"
+                                          filled
+                                          rounded
+                                          dense
+                                          required
+                                          :append-icon="
+                                          show1 ? 'mdi-eye' : 'mdi-eye-off'
+                                        "
+                                          :type="show1 ? 'text' : 'password'"
+                                          :rules="[comparePassword]"
+                                          name="input-10-1"
+                                          label="Confirmar Contraseña *"
+                                          counter
+                                          @click:append="show1 = !show1"
+                                      ></v-text-field>
+                                    </v-row>
+                                    <v-row>
                                       <v-btn
                                         block
                                         elevation="2"
@@ -233,6 +251,7 @@ export default {
       usernameReg: "",
       emailReg: "",
       passReg: "",
+      confirmPassword:'',
       verification: false,
       verificationInput: "",
 
@@ -348,5 +367,10 @@ export default {
         });
     },
   },
+  computed:{
+    comparePassword(){
+      return this.passReg !== this.confirmPassword ? 'Passwords do not match' : true
+    }
+  }
 };
 </script>
