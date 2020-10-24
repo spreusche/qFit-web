@@ -20,6 +20,7 @@
 
         </v-col>
       </v-row>
+      
       <v-row>
         <v-col cols="4" md="5">
           <v-header><h4>Descanso entre ejercicios:</h4></v-header>
@@ -28,6 +29,7 @@
           <v-text-field v-model="descansoEj" outlined required :rules = 'repetitionRules' suffix="segs"></v-text-field>
         </v-col>
       </v-row>
+
       <v-row align="center">
           <v-btn
           color="grey lighten-2" elevation="3"

@@ -8,12 +8,26 @@
 
       <v-spacer></v-spacer>
       <!--  debaja porque entra en un loop @click=$router.go(-1)  -->
-      <v-btn color="error" :to="{name:'MisRutinas'}" > ATRÁS </v-btn>
+      <v-btn color="error" v-if="!se_creo" :to="{name:'MisRutinas'}" 
+      > CANCELAR </v-btn>
+
+      <v-btn color="blue" v-if="se_creo" dark
+      @click="this.cambiarflag" 
+      > VOLVER </v-btn>
 
       <v-btn
+        @click="this.editRoutine"
+      color="blue ml-3 mr-1"
+      dark 
+      v-if="!se_creo"
+      >
+        SIGUIENTE
+      </v-btn>
 
-          @click="this.editRoutine"
+      <v-btn
+        @click="this.saveandexit"
       color="light-green accent-4 ml-3 mr-1"
+      v-if="se_creo"
       dark >
         GUARDAR
       </v-btn>
@@ -22,9 +36,8 @@
     </v-row>
 
     <v-divider></v-divider>
-    <v-card flat>{{warning}}</v-card>
 
-    <v-row>
+    <v-row v-if="!se_creo">
       <v-col>
 
         <v-card elevation="0">
@@ -52,6 +65,7 @@
                 <v-textarea
                   v-model="description"
                   outlined
+                  class="pa-2"
                   auto-grow
                   clearable
                   clear-icon="mdi-close-circle"
@@ -94,10 +108,9 @@
       </v-col>
     </v-row>
 
-    <v-divider></v-divider>
-    <v-divider></v-divider>
+   
 
-    <v-row>
+    <v-row v-if="se_creo">
       <v-col>
         <v-card>
           <v-card-title class="justify-center">ENTRADA EN CALOR</v-card-title>
@@ -132,6 +145,8 @@
  export default {
 
    data: () => ({
+     se_creo: false,
+     createdRoutine: -1,
      id: -1,
      valid: true,
      name: "",
@@ -179,7 +194,27 @@
    },
 
    methods: {
+    cambiarflag: function (){
+      this.se_creo = !this.se_creo;
+    },
+
+    saveandexit: function(){
+      if (this.id != -1){
+      this.$refs.calor.createCycle(this.id, "warmup", 1);
+               this.$refs.ppal.createCycle(this.id, "exercise", 2);
+               this.$refs.frio.createCycle(this.id, "cooldown", 3);
+               this.$refs.calor.setID(this.id);
+               this.$refs.ppal.setID(this.id);
+               this.$refs.frio.setID(this.id);
+               alert("Rutina Creada");
+      }
+      this.$router.push({ name: 'MisRutinas' });
+    },
+
      editRoutine: function() {
+       if (this.se_creo == false){
+         this.se_creo =true;
+       }
 
        if (this.id != -1) {
 //si no es crear nueva rutina, edita la que estás editando
@@ -212,15 +247,10 @@
                  id: this.category,
                }
              })
-             .then((response) => {
-               this.$refs.calor.createCycle(response.data.id, "warmup", 1);
-               this.$refs.ppal.createCycle(response.data.id, "exercise", 2);
-               this.$refs.frio.createCycle(response.data.id, "cooldown", 3);
-               this.$refs.calor.setID(response.data.id);
-               this.$refs.ppal.setID(response.data.id);
-               this.$refs.frio.setID(response.data.id);
-               alert("Rutina Creada");
+             .then((response)=>{
+               this.id = response.data.id;
              })
+             alert("rutina creada")
        }
      },
    },

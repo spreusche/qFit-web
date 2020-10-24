@@ -15,23 +15,27 @@
         color="error"
         :to="{ name: 'EditarRutina', params: { id: this.routineID } }"
       >
-        ATRÁS
+        VOLVER
       </v-btn>
     </v-row>
 
     <hr />
 
     <!--    header del table-->
-    <v-list>
-      <v-list-item>
+    <v-list align-items="center">
+      <v-list-item class="d-flex justify-center" >
             <v-card height="29px" width="400px" align="center"> Ejercicio </v-card>
-            <v-card height="29px" width="400px" align="center">
+            <v-card height="29px" width="400px" align="center" class="mr-2">
               Repeticiones / Tiempo
             </v-card>
-      </v-list-item>
+            <v-btn icon disabled >
+              </v-btn>
+              <v-btn icon disabled color="white">
+              </v-btn>
+      </v-list-item >
         <!--    body of table-->
-        <div class="ma-3" v-for="exercise in currentCycle" :key="exercise">
-          <v-list-item>
+        
+          <v-list-item class="d-flex justify-center" v-for="exercise in currentCycle" :key="exercise" >
               <v-card width="400px" align="center">
                 {{ exercise.name }}
               </v-card>
@@ -52,15 +56,20 @@
               </v-btn>
           </v-list-item>
 
-        </div>
+        
 
         <!-- footer of table-->
-      <v-list-item>
+      <v-list-item class="d-flex justify-center">
           <v-btn
             :to="{
               name: 'CrearEjercicio',
               params: { routineID: this.routineID, cycleID: this.cycleIDs[this.number - 1],},
-            }" > + agregar ejercicio </v-btn>
+            }" > + agregar ejercicio 
+            </v-btn>
+            <v-btn icon disabled >
+              </v-btn>
+              <v-btn icon disabled color="transparent">
+              </v-btn>
       </v-list-item>
     </v-list>
 

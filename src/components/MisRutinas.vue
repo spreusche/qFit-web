@@ -1,42 +1,32 @@
 <template >
   <v-container fluid id="Mis Rutinas">
     <v-row>
-      <v-col>
+     
         <h1>Mis Rutinas</h1>
-      </v-col>
-    </v-row>
-    <v-row>
-      <v-col cols="2">
-        <v-btn
-          color="green"
-          text
-          outlined
+     <v-spacer></v-spacer>
+      <v-btn
+          color="blue"
+          elevation="1"
+
+          class="mr-5 mt-2"
+          dark
           :to="{ name: 'EditarRutina', params: { id: -1 } }"
         >
           + Crear Rutina
         </v-btn>
-
-      </v-col>
-
     </v-row>
-
     
     <v-row>
       <v-col cols="2">
 
-        <v-select :items="filters" label="Filtrar" dense outlined v-model="difficulty" item-text="spanish" item-value="id"></v-select>
+        <v-select :items="filters" @click="update" label="Filtrar" dense outlined v-model="difficulty" item-text="spanish" item-value="id"></v-select>
 
       </v-col>
       <v-col cols="2">
-        <v-select :items="orderBy" label="Ordenar Por" dense outlined v-model="order" item-text="spanish" item-value="id"></v-select>
+        <v-select :items="orderBy" @click="update" label="Ordenar Por" dense outlined v-model="order" item-text="spanish" item-value="id"></v-select>
       </v-col>
       <v-col cols="2">
-        <v-select :items="ascOrDesc" label="Orden" dense outlined v-model="direction" item-text="spanish" item-value="id"></v-select>
-      </v-col>
-      <v-col>
-        <v-btn icon color="blue" @click="update">
-          <v-icon>mdi-cached</v-icon>
-        </v-btn>
+        <v-select :items="ascOrDesc" @click="update" label="Orden" dense outlined v-model="direction" item-text="spanish" item-value="id"></v-select>
       </v-col>
     </v-row>
     <hr />
@@ -44,7 +34,7 @@
 
 
     <div class="ma-3" v-for="routine in routines" :key="routine">
-      <v-card elevation="4" max-width="1114">
+      <v-card elevation="4">
         <v-row>
           <v-col>
             <v-card-title class="pt-1">{{ routine.name }}</v-card-title>
@@ -80,7 +70,7 @@
         <v-card-actions>
           <v-spacer></v-spacer>
 
-          <v-btn icon @click="routine.isPublic = !routine.isPublic">
+          <v-btn icon @click=" showContent(routine) ">
             <v-icon>{{ routine.isPublic ? "mdi-chevron-down" : "mdi-chevron-up" }}</v-icon>
           </v-btn>
         </v-card-actions>
@@ -105,8 +95,24 @@
                 <h3>Categoría: </h3> {{ routine.category.name }}
               </v-list-item>
               <v-list-item>
-                <h3>Contenido: </h3> {{ routine.content }}
+                <h3>Contenido: </h3> 
               </v-list-item>
+               <v-list-item><u>Entrada en calor:</u></v-list-item>
+
+                  <v-list-item v-for="(exercises, index) in entrada" :key="index">
+                      {{exercises}}
+                  </v-list-item>
+
+                  <v-list-item><u>Ejercitación principal:</u></v-list-item>
+                  <v-list-item v-for="(exercises, index) in ppal" :key="index">
+                      {{exercises}}
+                  </v-list-item>
+
+
+                  <v-list-item><u>Enfriamiento:</u></v-list-item>
+                  <v-list-item v-for="(exercises, index) in enfriamiento" :key="index">
+                      {{exercises}}
+                </v-list-item>
             </v-list>
           </div>
         </v-expand-transition>
@@ -136,6 +142,15 @@ export default {
     queryFilters: "",
     routines: [],
     flag: -1,
+
+    id: 1,
+    i: 0,
+    cycleIDs: [0,0,0],
+    routineContent: [],
+    entrada: [],
+    ppal: [],
+    enfriamiento: [],
+
   }),
   beforeMount: function () {
     this.axios
@@ -147,6 +162,53 @@ export default {
   },
 
   methods: {
+
+    showContent: function(routine){
+      this.entrada = [];
+      this.ppal = [];
+      this.enfriamiento = [];
+      this.id = routine.id;
+       this.axios
+        //get CycleIDs
+        .get(UserApi.baseUrl + "/routines/" + this.id + "/cycles/")
+        .then((response) => {
+          this.cycleIDs[0] = response.data.results[0].id;
+          this.cycleIDs[1] = response.data.results[1].id;
+          this.cycleIDs[2] = response.data.results[2].id;
+        })
+    .then((response) => {
+      console.log(response);
+
+      this.axios
+          .get(UserApi.baseUrl + "/routines/" + this.id + "/cycles/" + this.cycleIDs[0] + "/exercises")
+          .then((response) => {
+             for(this.i=0 ; this.i< response.data.results.length; this.i++)
+            {
+              this.entrada = this.entrada.concat(response.data.results[this.i].name);
+            }
+
+      this.axios
+          .get(UserApi.baseUrl + "/routines/" + this.id + "/cycles/" + this.cycleIDs[1] + "/exercises")
+          .then((response) => {
+            for(this.i=0 ; this.i< response.data.results.length; this.i++)
+            {
+              this.ppal = this.ppal.concat(response.data.results[this.i].name);
+            }
+          });
+      this.axios
+          .get(UserApi.baseUrl + "/routines/" + this.id + "/cycles/" + this.cycleIDs[2] + "/exercises")
+          .then((response) => {
+            for(this.i=0 ; this.i< response.data.results.length; this.i++)
+            {
+              this.enfriamiento = this.enfriamiento.concat(response.data.results[this.i].name);
+            }
+          });
+      });
+      routine.isPublic = !routine.isPublic
+    })
+
+
+    },
 
     //update routines
     update: function () {

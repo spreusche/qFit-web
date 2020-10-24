@@ -12,19 +12,14 @@
     <v-row>
       <v-col cols="2">
 
-        <v-select :items="filters" label="Filtrar" dense outlined v-model="difficulty" item-text="spanish" item-value="id"></v-select>
+        <v-select :items="filters" @click="update"  label="Filtrar" dense outlined v-model="difficulty" item-text="spanish" item-value="id"></v-select>
 
       </v-col>
       <v-col cols="2">
-        <v-select :items="orderBy" label="Ordenar Por" dense outlined v-model="order" item-text="spanish" item-value="id"></v-select>
+        <v-select :items="orderBy" @click="update" label="Ordenar Por" dense outlined v-model="order" item-text="spanish" item-value="id"></v-select>
       </v-col>
       <v-col cols="2">
-        <v-select :items="ascOrDesc" label="Orden" dense outlined v-model="direction" item-text="spanish" item-value="id"></v-select>
-      </v-col>
-      <v-col>
-        <v-btn icon color="blue" @click="update">
-          <v-icon>mdi-cached</v-icon>
-        </v-btn>
+        <v-select :items="ascOrDesc" @click="update" label="Orden" dense outlined v-model="direction" item-text="spanish" item-value="id"></v-select>
       </v-col>
     </v-row>
 
@@ -74,24 +69,19 @@
                       <template v-if="!errorOccured">
 
                       <v-card-subtitle> <h2><u>Ejercicios que encontrará en esta rutina:</u></h2></v-card-subtitle>
-
-                          <div v-for="(exercises, index) in exerciseArray" :key="index + 'd'">
+                          <v-list>
+                          <v-list-item v-for="(exercises, index) in exerciseArray" :key="index + 'd'">
                             <template v-for="(exercise, index2) in exercises">
-                              <v-card-text :key="index2 + 'f'">
-                                <v-card-subtitle>
-                               <h3><u> {{ exercise.name }} </u></h3>
-                              </v-card-subtitle>
-                              <v-card-text>
-                                {{ exercise.detail }}
-                              </v-card-text>
-                            </v-card-text>
+                                                  
+                              <h3 :key="index2 + 'f'" > {{ exercise.name }}: </h3>
+                               {{ exercise.detail }}
+                              
                             </template>
-                          </div>
-
-
-
+                          </v-list-item>
+                          </v-list>
 
                       </template>
+                     
                       <template v-else>
                         <v-card-text>
                         <h2 style="color:red;">

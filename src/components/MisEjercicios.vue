@@ -1,20 +1,21 @@
 <template >
     <v-container fluid  id="MisEjercicios">
         <v-row>
-            <v-col>
-                <h1>Mis Ejercicios</h1>
-            </v-col>
-        </v-row>
-      <v-row>
-        <v-col cols="1">
-          <v-btn color="green" text outlined
+
+            <h1>Mis Ejercicios</h1>
+
+            <v-spacer> </v-spacer>
+            <v-btn color="blue" 
+             elevation="1"
+
+            class="mr-5 mt-2 mb-2"
+            dark
                  :to="{name:'CrearEjercicio', params: { routineID: 1, cycleID: 1}}" >
             + Crear Ejercicio
           </v-btn>
-        </v-col>
-      </v-row>
+        </v-row>
 
-      <hr />
+      <hr/>
 
       <div class="ma-3" v-for="exercise in masterCycle" :key="exercise">
 

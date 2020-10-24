@@ -55,6 +55,9 @@
         </v-list>
       </v-menu>
     </v-app-bar>
+    <v-snackbar top color="error" v-model="error_busqueda">
+      <p> Para la búsqueda son necesarias al menos 3 caracteres. </p>
+    </v-snackbar>
   </v-container>
 </template>
 
@@ -69,6 +72,7 @@ export default {
     username: "",
     avatarUrl: "",
     query: "",
+    error_busqueda: false
   }),
 
   methods: {
@@ -78,8 +82,13 @@ export default {
     },
 
     buscar: function(){
+      if (this.query.length >= 3 ){
       this.$router.push({ name: 'searchExplorar', params: { query:  this.query } });
       location.reload();
+      }
+      else {
+        this.error_busqueda = true;
+      }
     },
 
     save(date) {
