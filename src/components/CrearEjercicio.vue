@@ -6,7 +6,35 @@
         <h1>Crear Ejercicio</h1>
       </div>
 
+     <v-spacer></v-spacer>
+
+     <v-btn @click="openPopUp"
+            color="blue"
+            dark >
+       Tomar uno existente
+     </v-btn>
+
+
+     <v-dialog v-model="popUp" width="500px">
+      <v-list width="500px">
+        <v-list-item @click="chooseRoutine()" >
+         Ejercicio en blanco
+        </v-list-item>
+
+       <div v-for="routine in routines" :key="routine" >
+         <v-list-item @click="chooseRoutine(routine)">
+           <h3>{{routine.name}}</h3>
+            :
+           {{routine.detail}}
+           </v-list-item>
+       </div>
+
+       </v-list>
+     </v-dialog>
+
+
       <v-spacer></v-spacer>
+     <v-spacer></v-spacer>
 
       <v-btn color="error" @click="$router.go(-1)"> ATRÁS </v-btn>
 
@@ -84,7 +112,7 @@
         <v-card-title>Demostración</v-card-title>
           <v-row>
               <v-col cols="3">
-                <v-header><h3>Categorías:</h3></v-header>
+                <v-header><h3>Tipo:</h3></v-header>
               </v-col>
               <v-col cols="8">
                 <v-text-field outlined v-model="type"></v-text-field>
@@ -113,6 +141,7 @@ import {UserApi} from "@/api/user";
 export default {
 
   data: () => ({
+    popUp: false,
     routineID: -1,
     cycleID: -1,
     name: "",
@@ -123,7 +152,8 @@ export default {
     rules: [(v) => !!v || "Debes completar la información"],
     numberRules: [
       v => /^[0-9]\d*$/.test(v) || 'Debe ser un número entero',
-      v => !!v || 'Debe ser un número entero']
+      v => !!v || 'Debe ser un número entero'],
+    routines: [],
 
   }),
 
@@ -132,12 +162,40 @@ export default {
     this.cycleID=this.$route.params.cycleID;
     this.routineID=this.$route.params.routineID;
 
+    this.axios
+    .get(UserApi.baseUrl + "/routines/1/cycles/1/exercises")
+    .then((response) => {
+      console.log(response.data.results);
+      this.routines=response.data.results;
+    })
+
     if(this.$route.params.exerciseID != null){
       this.fillBoxes();
     }
   },
 
   methods: {
+
+    chooseRoutine: function(routine) {
+      if(routine==null){
+        this.name = "";
+        this.detail = "";
+        this.type = "";
+        this.duration = "";
+        this.repetitions = "";
+      } else {
+        this.name = routine.name;
+        this.detail = routine.detail;
+        this.type = routine.type;
+        this.duration = routine.duration;
+        this.repetitions = routine.repetitions;
+      }
+      this.popUp = false;
+    },
+
+    openPopUp() {
+      this.popUp=true;
+    },
 
     fillBoxes: function(){
       console.log("entré a fillboxes");
@@ -204,6 +262,7 @@ export default {
               console.log(response);
             }).catch(() => console.log("errorciño editando el ejercicio"));
       }
+      alert("Ejercicio Guardado");
 
     }
 

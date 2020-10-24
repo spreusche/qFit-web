@@ -22,68 +22,48 @@
     <hr />
 
     <!--    header del table-->
-    <v-row>
-      <v-col align="right">
-        <v-card height="29px" width="400px" align="center"> Ejercicio </v-card>
-      </v-col>
-      <v-col>
-        <v-card height="29px" width="400px" align="center">
-          Repeticiones / Tiempo
-        </v-card>
-      </v-col>
-    </v-row>
+    <v-list>
+      <v-list-item>
+            <v-card height="29px" width="400px" align="center"> Ejercicio </v-card>
+            <v-card height="29px" width="400px" align="center">
+              Repeticiones / Tiempo
+            </v-card>
+      </v-list-item>
+        <!--    body of table-->
+        <div class="ma-3" v-for="exercise in currentCycle" :key="exercise">
+          <v-list-item>
+              <v-card width="400px" align="center">
+                {{ exercise.name }}
+              </v-card>
 
-    <!--    body of table-->
-    <div class="ma-3" v-for="exercise in currentCycle" :key="exercise">
-      <v-row>
-        <v-spacer></v-spacer>
-        <v-spacer></v-spacer>
+              <v-card width="400px" align="center">
+                {{ exercise.duration }}
+                /
+                {{ exercise.repetitions }}
+              </v-card>
 
-        <v-col align="right">
-          <v-card width="400px" align="left">
-            {{ exercise.name }}
-          </v-card>
-        </v-col>
 
-        <v-col>
-          <v-card height="29px" width="400px" align="center">
-            {{ exercise.duration }}
-            /
-            {{ exercise.repetitions }}
+              <v-btn icon @click="editExercise(exercise.id)">
+                <v-icon>mdi-pencil</v-icon>
+              </v-btn>
+              <v-btn icon color="red"
+              @click="deleteExercise(exercise.id)">
+                <v-icon>mdi-delete</v-icon>
+              </v-btn>
+          </v-list-item>
 
-          </v-card>
-        </v-col>
+        </div>
 
-        <v-col align="right">
-          <v-btn icon @click="editExercise(exercise.id)">
-            <v-icon>mdi-pencil</v-icon>
-          </v-btn>
-        </v-col>
+        <!-- footer of table-->
+      <v-list-item>
+          <v-btn
+            :to="{
+              name: 'CrearEjercicio',
+              params: { routineID: this.routineID, cycleID: this.cycleIDs[this.number - 1],},
+            }" > + agregar ejercicio </v-btn>
+      </v-list-item>
+    </v-list>
 
-        <v-col align="left">
-          <v-btn icon color="red"
-          @click="deleteExercise(exercise.id)">
-            <v-icon>mdi-delete</v-icon>
-          </v-btn>
-        </v-col>
-
-      </v-row>
-    </div>
-
-    <!-- footer of table-->
-    <v-row justify="center">
-      <v-btn
-        :to="{
-          name: 'CrearEjercicio',
-          params: {
-            routineID: this.routineID,
-            cycleID: this.cycleIDs[this.number - 1],
-          },
-        }"
-      >
-        + agregar ejercicio</v-btn
-      >
-    </v-row>
   </v-container>
 </template>
 
@@ -152,7 +132,7 @@ export default {
 
 
     deleteExercise(exerciseID){
-      this.result = window.confirm("Está seguro que desea eliminar esta rutina?");
+      this.result = window.confirm("Está seguro que desea eliminar este ejercicio?");
       if (this.result) {
         this.axios
             .delete(UserApi.baseUrl + "/routines/" + this.routineID+ "/cycles/" + this.cycleID + "/exercises/" + exerciseID)

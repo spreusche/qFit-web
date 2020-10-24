@@ -23,13 +23,15 @@
     <hr />
     <v-row>
       <v-col cols="2">
-        <v-select :items="filters" label="Filtrar" dense outlined v-model="difficulty"></v-select>
+
+        <v-select :items="filters" label="Filtrar" dense outlined v-model="difficulty" item-text="spanish" item-value="id"></v-select>
+
       </v-col>
       <v-col cols="2">
-        <v-select :items="orderBy" label="Ordenar Por" dense outlined v-model="order"></v-select>
+        <v-select :items="orderBy" label="Ordenar Por" dense outlined v-model="order" item-text="spanish" item-value="id"></v-select>
       </v-col>
       <v-col cols="2">
-        <v-select :items="ascOrDesc" label="Orden" dense outlined v-model="direction"></v-select>
+        <v-select :items="ascOrDesc" label="Orden" dense outlined v-model="direction" item-text="spanish" item-value="id"></v-select>
       </v-col>
       <v-col>
         <v-btn icon color="orange" @click="update">
@@ -53,9 +55,6 @@
           <v-col>
             <v-card-actions class="pt-0">
               <v-spacer></v-spacer>
-              <v-btn icon v-bind="attrs" color="blue" @click="copy">
-                <v-icon>mdi-share</v-icon>
-              </v-btn>
 
               <v-btn
                 icon
@@ -121,11 +120,17 @@
 import { UserApi } from "../api/user";
 export default {
   data: () => ({
-    filters: ["", "rookie", "begginer", "intermediate", "advanced", "expert"],
+    filters: [
+      {id:"", spanish:""}, {id:"rookie", spanish:"Novato"}, {id:"begginer", spanish:"Principiante"}, {id:"intermediate", spanish:"Intermedio"}, {id:"advanced", spanish:"Avanzado"}, {id:"expert", spanish:"Experto"}
+    ],
     difficulty: "",
-    orderBy: ["", "id", "name", "detail", "dateCreated", "averageRating", "difficulty", "categoryID", "creatorID"],
+    orderBy: [
+      {id:"", spanish:""}, {id:"id", spanish:"ID"}, {id:"name", spanish:"Nombre"}, {id:"detail", spanish:"Detalles"}, {id:"dateCreated", spanish:"Fecha de creación"}, {id:"averageRating", spanish:"Rating"}, {id:"difficulty", spanish:"Dificultad"}, {id:"categoryID", spanish:"Categoría"}, {id:"creatorID", spanish:"Creador"}
+    ],
     order: "",
-    ascOrDesc: ["", "asc", "desc"],
+    ascOrDesc: [
+      {id:"", spanish:""}, {id:"asc", spanish:"Ascendiente"}, {id:"desc", spanish:"Descendiente"}
+    ],
     direction: "",
     queryFilters: "",
     routines: [],
@@ -165,6 +170,7 @@ export default {
   },
 
   methods: {
+
     //update routines
     update: function () {
       this.queryFilters = "";
@@ -212,10 +218,6 @@ export default {
           alert("no se puede borrar la rutina 1, ésta contiene el masterCycle");
         }
       }
-    },
-
-    copy: function() {
-      this.$clipboard("You can copy stuff to the Clipboard by clicking on any element, like an image");
     },
 
     setID: function (num) {

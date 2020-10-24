@@ -77,9 +77,12 @@
               <v-col cols="3">
                 <v-header><h3>Categorías:</h3></v-header>
               </v-col>
+
+
               <v-col cols="8">
-                <v-text-field outlined v-model="materials"></v-text-field>
+                <v-select :items="categories" label="Categorías" dense outlined v-model="category" item-text="name" item-value="id"></v-select>
               </v-col>
+
           </v-row>
 
           <v-row>
@@ -89,12 +92,27 @@
               <v-col cols="8">
                 <v-text-field outlined v-model="materials"></v-text-field>
               </v-col>
-            </v-row>
+          </v-row>
+
+          <v-row>
+            <v-col cols="3">
+              <v-header><h3>Dificultad:</h3></v-header>
+            </v-col>
+
+            <v-col cols="8">
+              <v-select :items="difficulties" label="Dificultad" dense outlined v-model="difficulty" item-text="spanish" item-value="id"></v-select>
+            </v-col>
+
+          </v-row>
 
         </v-card>
       </v-col>
     </v-row>
 
+    <v-divider></v-divider>
+
+    <v-card flat>{{warning}}</v-card>
+    <v-divider></v-divider>
 
     <v-row>
       <v-col>
@@ -140,6 +158,14 @@
      select: null,
      title: "",
      cycleID: 0,
+     warning: "",
+     categories: [],
+     category: null,
+     difficulties: [
+       {id:"", spanish:""}, {id:"rookie", spanish:"Novato"}, {id:"begginer", spanish:"Principiante"}, {id:"intermediate", spanish:"Intermedio"}, {id:"advanced", spanish:"Avanzado"}, {id:"expert", spanish:"Experto"}
+     ],
+     difficulty: "",
+     i: 0,
    }),
    components: {
      FormEjercicios,
@@ -159,7 +185,18 @@
         this.title="Editar Rutina";
      } else {
        this.title = "Crear Rutina";
+       this.warning="No olvide guardar la rutina antes de empezar a agregarle ejercicios";
      }
+     this.axios
+     .get(UserApi.baseUrl + "/categories")
+     .then((response) => {
+       this.categories=[];
+       for(this.i = 0; this.i < response.data.results.length; this.i++){
+         this.categories[this.i] = response.data.results[this.i]; //.name;
+       }
+       console.log("categorias:");
+       console.log(this.categories);
+     })
    },
 
    methods: {
@@ -172,9 +209,9 @@
                name: this.name + "&",
                detail: this.description,
                isPublic: true,
-               difficulty: "rookie",
+               difficulty: this.difficulty,
                category: {
-                 id: 1,
+                 id: this.category,
                }
              })
              .then((response) => {
@@ -201,9 +238,9 @@
                name: this.name,
                detail: this.description,
                isPublic: true,
-               difficulty: "rookie",
+               difficulty: this.difficulty,
                category: {
-                 id: 1,
+                 id: this.category,
                }
              })
              .then((response) => {

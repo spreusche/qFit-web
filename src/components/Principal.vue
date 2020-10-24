@@ -182,13 +182,13 @@
           </v-col>
         </v-row>
       </v-container></v-img>
-    <v-snackbar top :multi-line="multiLine" v-model="snackBar_credencialesIncorrectas"> 
-      Usuario y/o Contraseña incorrecta 
+    <v-snackbar top :multi-line="multiLine" v-model="snackBar_credencialesIncorrectas">
+      Usuario y/o Contraseña incorrecta
     </v-snackbar>
-    <v-snackbar top :multi-line="multiLine" v-model="snackBar_faltaVerificacion"> 
+    <v-snackbar top :multi-line="multiLine" v-model="snackBar_faltaVerificacion">
       <h3>Debe activar su cuenta. </h3>
       <p> Revise su casilla de correo electrónico. </p>
-      <v-btn color="#00E140" @click="[snackBar_faltaVerificacion = false, snackBar_llenarCorreo = true]"> 
+      <v-btn color="#00E140" @click="[snackBar_faltaVerificacion = false, snackBar_llenarCorreo = true]">
         Reenviar correo de verificación.
       </v-btn>
     </v-snackbar>
@@ -210,7 +210,7 @@
 
     <v-snackbar top color="error" v-model="snackBar_errorReenviar">
       <h2>Ocurrió un error</h2>
-      <p> Recuerde usar el mismo correo con el que se registró. </p> 
+      <p> Recuerde usar el mismo correo con el que se registró. </p>
     </v-snackbar>
   </div>
 
@@ -348,6 +348,7 @@ export default {
             this.verification = true;
           })
           .catch((error) => console.log(error.detail));
+
       }
     },
     verifyCode: function () {
