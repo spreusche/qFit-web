@@ -7,6 +7,7 @@ import Principal from '../components/Principal'
 import EditarRutina from '../components/EditarRutina'
 import CrearEjercicio from '../components/CrearEjercicio'
 import TablaEjercicios from '../components/TablaEjercicios'
+import Verificacion from '../components/Verificacion'
 import axios from 'axios'
 
 Vue.use(VueRouter)
@@ -63,6 +64,11 @@ const routes = [
     name: 'TablaEjercicios',
     component: TablaEjercicios,
     meta: {requiresAuth:true}
+  },
+  {
+    path: '/Verificacion',
+    name: 'Verificacion',
+    component: Verificacion
   }
 ]
 

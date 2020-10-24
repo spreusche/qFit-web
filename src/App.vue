@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <Toolbar v-if="isNotHome"/>
+    <Toolbar v-if="isNotHome && isNotVerif"/>
     <v-main>
       <router-view/>
     </v-main>
@@ -23,6 +23,9 @@ export default {
   computed: { 
     isNotHome() {
       return this.$route.path != '/'
+    },
+    isNotVerif(){
+      return this.$route.path != '/Verificacion'
     }
   },
 

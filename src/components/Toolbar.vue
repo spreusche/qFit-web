@@ -100,7 +100,7 @@ export default {
       this.axios
         .put(UserApi.baseUrl + "/user/current", {
           username: this.username,
-          fullName: this.name + '' + this.lastName,
+          fullName: this.name + ' ' + this.lastName,
           gender: "male",
           birthdate: 284007600000,
           email: this.email,

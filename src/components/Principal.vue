@@ -163,9 +163,39 @@
             </v-row>
           </v-col>
         </v-row>
-      </v-container></v-img
-    >
+      </v-container></v-img>
+    <v-snackbar top :multi-line="multiLine" v-model="snackBar_credencialesIncorrectas"> 
+      Usuario y/o Contraseña incorrecta 
+    </v-snackbar>
+    <v-snackbar top :multi-line="multiLine" v-model="snackBar_faltaVerificacion"> 
+      <h3>Debe activar su cuenta. </h3>
+      <p> Revise su casilla de correo electrónico. </p>
+      <v-btn color="#00E140" @click="[snackBar_faltaVerificacion = false, snackBar_llenarCorreo = true]"> 
+        Reenviar correo de verificación.
+      </v-btn>
+    </v-snackbar>
+    <v-snackbar top v-model="snackBar_llenarCorreo" timeout="-1" :multi-line="multiLine" :vertical="vertical">
+       <h3 class="mb-4" > Recuerde usar el mismo correo con el que se registró. </h3>
+
+      <v-text-field v-model="correoEnSnack" label="Ingrese su correo" filled rounded dense></v-text-field>
+
+      <v-btn right class="mr-5, ml-3"  color="red" @click="snackBar_llenarCorreo = false" width="45%">
+        Cancelar
+      </v-btn>
+
+      <v-btn right class="ml-4" color="#00E140" @click="[snackBar_llenarCorreo = false, resendEmail()]" width="45%">
+        Enviar
+      </v-btn>
+    </v-snackbar>
+
+
+
+    <v-snackbar top color="error" v-model="snackBar_errorReenviar">
+      <h2>Ocurrió un error</h2>
+      <p> Recuerde usar el mismo correo con el que se registró. </p> 
+    </v-snackbar>
   </div>
+
 </template>
 
 <style>
@@ -211,6 +241,13 @@ export default {
       showMissingPass: false,
       incorrectCode: false,
 
+      snackBar_credencialesIncorrectas: false,
+      snackBar_faltaVerificacion: false,
+      snackBar_llenarCorreo: false,
+      correoEnSnack: '',
+      snackBar_errorReenviar: false,
+
+
       rules: {
         required: (value) => !!value || "Obligatorio",
         min: (v) => v.length >= 8 || "Mínimo 8 caracteres",
@@ -224,7 +261,7 @@ export default {
           username: this.username,
           password: this.password,
         })
-        .then((response) => {
+        .then(response => {
           localStorage.setItem("token",response.data.token);
           UserApi.token = response.data.token;
           console.log(localStorage.getItem("token"));
@@ -234,13 +271,23 @@ export default {
           // router.go(1);
           router.push({ name: "Explorar" });
         })
-        .catch((error) => {
-          console.log(error);
-          if (error.code === 401) {
-            console.log("HOLAAAAAAa");
+        .catch(error => {
+          console.log(error.response.data.code);
+          if(error.response.data.code == 4){
+            this.snackBar_credencialesIncorrectas = true;
+          }else if(error.response.data.code == 8){
+             this.snackBar_faltaVerificacion = true;
           }
+            this.snackBar_llenarCorreo = false;
         });
     },
+
+    resendEmail: function(){
+      this.axios.post(UserApi.baseUrl + "/user/resend_verification", {
+        email: this.correoEnSnack
+      }).catch(() => this.snackBar_errorReenviar = true);///////////
+    },
+
     register: function () {
       var cont = 1;
 
