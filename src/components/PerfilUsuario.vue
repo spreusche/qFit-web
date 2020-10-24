@@ -88,8 +88,11 @@
               <v-row>
                 <v-text-field
                     label="Biografía"
+                    v-model="biografia"
                     required
                     filled
+                    counter
+                    :rules="[rules.max]"
                 ></v-text-field>
               </v-row>
               <v-row>
@@ -97,6 +100,8 @@
                     label="Contacto"
                     filled
                     v-model= "contact"
+                    counter
+                    :rules="[rules.maxContact]"
                 ></v-text-field>
               </v-row>
             </v-col>
@@ -121,6 +126,13 @@ export default {
     birthdate: "",
     contact: "",
     gender: "",
+    biografia: "",
+
+     rules:{
+      max: (s) => s.length < 225 || "La cantidad máxima de caracteres es 225",
+      maxContact: (s) => s.length <= 50 || "La cantidad máxima de caracteres es 50",
+     },
+
   }),
 
 
@@ -168,5 +180,6 @@ export default {
   created() {
     this.getCurrentData();
   },
+ 
 };
 </script>

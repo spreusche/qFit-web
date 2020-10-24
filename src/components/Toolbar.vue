@@ -97,7 +97,7 @@ export default {
       this.axios
           .post(UserApi.baseUrl + "/user/logout")
           .then(() =>{
-            window.localStorage.clear();
+            localStorage.clear();
             this.$router.push('/');
           })
           .catch((error) => console.log(error));

@@ -185,7 +185,7 @@
 //si no es crear nueva rutina, edita la que estás editando
          this.axios
              .put(UserApi.baseUrl + "/routines/" + this.id, {
-               name: this.name + "&",
+               name: this.name,
                detail: this.description,
                isPublic: true,
                difficulty: this.difficulty,

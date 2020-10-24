@@ -66,6 +66,7 @@
                                         filled
                                         rounded
                                         dense
+                                        :rules="[rules.required, rules.minUsername]"
                                       ></v-text-field>
                                     </v-row>
 
@@ -75,6 +76,7 @@
                                         label="Email *"
                                         v-model="emailReg"
                                         required
+                                        :rules="[rules.required, rules.email]"
                                         filled
                                         rounded
                                         dense
@@ -136,6 +138,7 @@
                                   <!--Input registro verificacion -->
                                   <v-container v-show="verification">
                                     <v-row>
+                                      <h3 class="mb-3">El código de verificación fue enviado a su casilla de correo electrónico.</h3>
                                       <v-text-field
                                         v-model="verificationInput"
                                         filled
@@ -206,11 +209,17 @@
       </v-btn>
     </v-snackbar>
 
-
-
     <v-snackbar top color="error" v-model="snackBar_errorReenviar">
       <h2>Ocurrió un error</h2>
       <p> Recuerde usar el mismo correo con el que se registró. </p>
+    </v-snackbar>
+
+    <v-snackbar top color="error" v-model="snackBar_usernameTaken"> 
+      El nombre de usuario ya existe.
+    </v-snackbar>
+
+    <v-snackbar top color="error" v-model="snackBar_emailTaken"> 
+      El correo ya existe.
     </v-snackbar>
   </div>
 
@@ -265,11 +274,19 @@ export default {
       snackBar_llenarCorreo: false,
       correoEnSnack: '',
       snackBar_errorReenviar: false,
+      snackBar_usernameTaken: false,
+      snackBar_emailTaken: false,
+      
 
 
       rules: {
         required: (value) => !!value || "Obligatorio",
         min: (v) => v.length >= 8 || "Mínimo 8 caracteres",
+        minUsername:(v) => v.length >=1 || "Ingrese un nombre de usuario",
+        email: value => {
+            const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+            return pattern.test(value) || 'Correo inválido.'
+          },
       },
     };
   },
@@ -302,11 +319,13 @@ export default {
     resendEmail: function(){
       this.axios.post(UserApi.baseUrl + "/user/resend_verification", {
         email: this.correoEnSnack
-      }).catch(() => this.snackBar_errorReenviar = true);///////////
+      }).catch(() => this.snackBar_errorReenviar = true);
     },
 
     register: function () {
       var cont = 1;
+      this.snackBar_usernameTaken = false;
+      this.snackBar_emailTaken = false;
 
       if (this.usernameReg === "") {
         this.showMissingUsername = true;
@@ -332,7 +351,7 @@ export default {
           .post(UserApi.baseUrl + "/user", {
             username: this.usernameReg,
             password: this.passReg,
-            fullName: "j d",
+            fullName: "sin definir",
             gender: "male",
             birthdate: 0,
             email: this.emailReg,
@@ -345,8 +364,13 @@ export default {
             this.showMissingEmail = false;
             this.verification = true;
           })
-          .catch((error) => console.log(error.detail));
-
+          .catch((error) => {
+            console.log(error.response.data.details);
+            if(error.response.data.code == 2 && error.response.data.details[0] == "UNIQUE constraint failed: Users.username")
+                this.snackBar_usernameTaken = true;
+            if(error.response.data.code == 2 && error.response.data.details[0] == "UNIQUE constraint failed: Users.email")
+                this.snackBar_emailTaken = true;
+          });
       }
     },
     verifyCode: function () {
@@ -368,7 +392,7 @@ export default {
   },
   computed:{
     comparePassword(){
-      return this.passReg !== this.confirmPassword ? 'Passwords do not match' : true
+      return this.passReg !== this.confirmPassword ? 'Las contraseñas no coinciden' : true
     }
   }
 };
