@@ -95,6 +95,7 @@ const router = new VueRouter({
    const routeAuth = to.matched.some(record => record.meta.requiresAuth);
 //   // para ver si el usuario hizo el login
    const token = localStorage.getItem("token");
+
 //
     if(token!=null){
       axios.defaults.headers.common[

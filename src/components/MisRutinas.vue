@@ -160,7 +160,6 @@ export default {
       .then((response) => {
         console.log(response.data.results);
         this.routines = response.data.results;
-        console.log("BUENARDO");
       })
       .catch(() => console.log("errorciño agarrando los datos de la api"));
   },

@@ -96,8 +96,7 @@ export default {
         .get(UserApi.baseUrl + "/routines/1/cycles/1/exercises")
         .then((response) => {
           this.masterCycle = response.data.results;
-          console.log(this.masterCycle);
-          console.log("BUENARDO");
+
 
           this.timeout = setTimeout(() => {
             this.update();
@@ -117,8 +116,7 @@ export default {
           .get(UserApi.baseUrl + "/routines/1/cycles/1/exercises")
           .then((response) => {
             this.masterCycle = response.data.results;
-            console.log(this.masterCycle);
-            console.log("BUENARDO2");
+
           })
           .catch(() => console.log("errorciño agarrando los datos de la api"));
     },

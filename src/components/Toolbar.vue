@@ -51,7 +51,7 @@
             <v-list-item-title><h3>{{ username }}</h3></v-list-item-title>
           </v-list-item>
           <PerfilUsuario></PerfilUsuario>
-          <v-list-item  to='/' @click="logOut()">
+          <v-list-item @click="logOut()">
             <v-list-item-title>Cerrar Sesión</v-list-item-title>
           </v-list-item>
         </v-list>
@@ -64,7 +64,7 @@
 
 <script>
 import { UserApi } from "@/api/user";
-import PerfilUsuario from "@/components/PerfilUsuario";
+import PerfilUsuario from "@/components/PerfilUsuario"; 
 export default {
   components: {PerfilUsuario},
   data: () => ({
@@ -100,8 +100,10 @@ export default {
     logOut: function () {
       this.axios
           .post(UserApi.baseUrl + "/user/logout")
-          .then( localStorage.clear(),
-          )
+          .then(() =>{
+            window.localStorage.clear();
+            this.$router.push('/');
+          })
           .catch((error) => console.log(error));
     },
     getAvatarUrl: function (){
