@@ -73,18 +73,18 @@
                           <v-list-item><u>Entrada en calor:</u></v-list-item>
 
                             <v-list-item v-for="(name, index) in entrada" :key="index">
-                                <h4>{{name}}</h4> <span>{{entradaD[index]}}</span>
+                                <h4>{{name}}:</h4> {{entradaD[index]}}
                             </v-list-item>
 
                             <v-list-item><u>Ejercitación principal:</u></v-list-item>
                             <v-list-item v-for="(name, index) in ppal" :key="index">
-                                <h4>{{name}}</h4> <span>{{ppalD[index]}}</span> 
+                                <h4>{{name}}:</h4> {{ppalD[index]}}
                             </v-list-item>
 
 
                             <v-list-item><u>Enfriamiento:</u></v-list-item>
                             <v-list-item v-for="(name, index) in enfriamiento" :key="index">
-                                 <h4>{{name}}</h4> <span>{{enfriamientoD[index]}}</span>
+                                 <h4>{{name}}:</h4>{{enfriamientoD[index]}}
                           </v-list-item>
                           </v-list>
 
@@ -200,7 +200,7 @@ export default {
               for(this.i=0 ; this.i< response.data.results.length; this.i++)
               {
                 this.entrada = this.entrada.concat(response.data.results[this.i].name);
-                this.entradaD = this.entradaD.concat(response.data.results[this.i].description);
+                this.entradaD = this.entradaD.concat(response.data.results[this.i].detail);
               }
 
         this.axios
@@ -209,7 +209,7 @@ export default {
               for(this.i=0 ; this.i< response.data.results.length; this.i++)
               {
                 this.ppal = this.ppal.concat(response.data.results[this.i].name);
-                this.ppalD = this.ppalD.concat(response.data.results[this.i].description);
+                this.ppalD = this.ppalD.concat(response.data.results[this.i].detail);
               }
             });
         this.axios
@@ -218,7 +218,7 @@ export default {
               for(this.i=0 ; this.i< response.data.results.length; this.i++)
               {
                 this.enfriamiento = this.enfriamiento.concat(response.data.results[this.i].name);
-                this.enfriamientoD = this.enfriamientoD.concat(response.data.results[this.i].description);
+                this.enfriamientoD = this.enfriamientoD.concat(response.data.results[this.i].detail);
               }
             });
         });
