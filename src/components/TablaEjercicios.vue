@@ -12,8 +12,10 @@
       <v-spacer></v-spacer>
       <v-btn
         class="mr-3"
-        color="error"
-        :to="{ name: 'EditarRutina', params: { id: this.routineID } }"
+        dark
+        color="blue"
+        @click="this.volver"
+        
       >
         VOLVER
       </v-btn>
@@ -146,7 +148,9 @@ export default {
             })
       }
     },
-
+    volver: function (){
+      window.history.back()
+    },
     getExercises: function () {
       this.axios
         .get(UserApi.baseUrl + "/routines/" + this.routineID + "/cycles/" + this.cycleID + "/exercises/"

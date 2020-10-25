@@ -25,6 +25,7 @@
         <v-text-field
           append-icon="mdi-magnify"
           @click:append="buscar"
+          @keyup.enter="buscar"
           v-model="query"
           flat
           dense

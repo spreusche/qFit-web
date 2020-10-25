@@ -130,6 +130,7 @@
                                         rounded
                                         class="caja"
                                         @click="register()"
+                                        @keyup.enter="register()"
                                         >REGISTRARSE
                                       </v-btn>
                                     </v-row>
@@ -157,6 +158,7 @@
                                         dark
                                         rounded
                                         class="caja"
+                                        @keyup.enter="verifyCode()"
                                         @click="verifyCode()"
                                         >VERIFICAR CÓDIGO
                                       </v-btn>
@@ -174,6 +176,7 @@
                           rounded
                           class="caja"
                           @click="logIn()"
+                          @keyup.enter="logIn()"
                           >INICIAR SESIÓN</v-btn
                         >
                       </v-row>
