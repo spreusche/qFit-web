@@ -217,11 +217,11 @@
       <p> Recuerde usar el mismo correo con el que se registró. </p>
     </v-snackbar>
 
-    <v-snackbar top color="error" v-model="snackBar_usernameTaken"> 
+    <v-snackbar top color="error" v-model="snackBar_usernameTaken">
       El nombre de usuario ya existe.
     </v-snackbar>
 
-    <v-snackbar top color="error" v-model="snackBar_emailTaken"> 
+    <v-snackbar top color="error" v-model="snackBar_emailTaken">
       El correo ya existe.
     </v-snackbar>
   </div>
@@ -279,7 +279,7 @@ export default {
       snackBar_errorReenviar: false,
       snackBar_usernameTaken: false,
       snackBar_emailTaken: false,
-      
+
 
 
       rules: {
@@ -362,10 +362,12 @@ export default {
             avatarUrl: " ",
           })
           .then(() => {
+            console.log("adentro del then")
             this.showMissingUsername = false;
             this.showMissingPass = false;
             this.showMissingEmail = false;
             this.verification = true;
+
           })
           .catch((error) => {
             console.log(error.response.data.details);

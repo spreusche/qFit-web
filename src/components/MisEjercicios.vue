@@ -5,7 +5,7 @@
             <h1>Mis Ejercicios</h1>
 
             <v-spacer> </v-spacer>
-            <v-btn color="blue" 
+            <v-btn color="blue"
              elevation="1"
 
             class="mr-5 mt-2 mb-2"
@@ -17,9 +17,7 @@
 
       <hr/>
 
-      <div class="ma-3" v-for="exercise in masterCycle" :key="exercise">
-
-        <p>{{getImage(exercise.id)}}</p>
+      <div class="ma-3" v-for="exercise in cycleToShow" :key="exercise">
 
         <v-card elevation="4" max-width="1114">
           <v-card-title>{{ exercise.name }}</v-card-title>
@@ -54,24 +52,6 @@
 
         </v-card>
 
-        <v-dialog v-model="dialog" width="600px">
-          <template v-slot:activator="{ on, attrs }">
-            <v-btn color="primary" dark v-bind="attrs" v-on="on">
-              Ver foto
-            </v-btn>
-          </template>
-          <v-card>
-            <v-app-bar flat dark color="#2d2d2a"> </v-app-bar>
-            <v-card-title>
-              <span class="headline">{{ exercise.name }}</span>
-            </v-card-title>
-
-            <v-img
-                :src="imgs[exercise.id -1]"
-            ></v-img>
-          </v-card>
-        </v-dialog>
-
 
 
       </div>
@@ -87,34 +67,40 @@ import { UserApi } from "../api/user";
 export default {
   data: () => ({
     cantRoutines: 0,
-    masterCycle: [],
-    imgs: [],
+    cycleToShow: [],
+    masterCycle: 0,
+    masterRoutine: 0,
   }),
   //cuando se entra a la pagina se hace esto :D
+//cuando se entra a la pagina se hace esto :D
   beforeMount: function () {
-    //routine 1 cycle 1 es el master cycle
+    //busco el masterCycle para mostrar los ejs
     this.axios
-        .get(UserApi.baseUrl + "/routines/1/cycles/1/exercises")
+        .get(UserApi.baseUrl + "/user/current/routines/favourites")
         .then((response) => {
-          this.masterCycle = response.data.results;
-
-
-          this.timeout = setTimeout(() => {
-            this.update();
-          }, 350)
-
+          this.masterRoutine = response.data.results[0].id;
+          this.axios
+              .get(UserApi.baseUrl + "/routines/" + this.masterRoutine + "/cycles")
+              .then((response) => {
+                this.masterCycle = response.data.results[0].id;
+                //ahora estan bien guardados los datos this.masterCycle y this.masterRoutine, voy a agarrar el cyclo para mostrarlo
+                this.axios
+                    .get(UserApi.baseUrl + "/routines/" + this.masterRoutine + "/cycles/" + this.masterCycle + "/exercises")
+                    .then((response) => {
+                      this.cycleToShow = response.data.results;
+                      console.log(this.cycleToShow)
+                    })
+              }).catch(() => console.log("errorciño agarrando los datos de masterCycle"));
         })
         .catch(() => console.log("errorciño agarrando los datos de la api"));
   },
 
   methods: {
-    update: function () { //esto se tiene que correr una vez despues de que se carga la pagina para que carguen las imagenes
+    update: function () {
       this.axios
-          //routine 1 cycle 1 tiene los ejs
-          .get(UserApi.baseUrl + "/routines/1/cycles/1/exercises")
+          .get(UserApi.baseUrl + "/routines/" + this.masterRoutine + "/cycles/" + this.masterCycle + "/exercises")
           .then((response) => {
-            this.masterCycle = response.data.results;
-
+            this.cycleToShow = response.data.results;
           })
           .catch(() => console.log("errorciño agarrando los datos de la api"));
     },
@@ -123,19 +109,11 @@ export default {
       this.result = window.confirm("Está seguro que desea eliminar esta rutina?");
       if (this.result) {
         this.axios
-            .delete(UserApi.baseUrl + "/routines/1/cycles/1/exercises/" + exerciseID)
-              this.update();
+            .delete(UserApi.baseUrl + "/routines/" + this.masterRoutine + "/cycles/" + this.masterCycle + "/exercises/" + exerciseID)
+        this.update();
       }
+
     },
-
-    getImage: function (id) {
-
-      this.axios
-          .get(UserApi.baseUrl + "/routines/1/cycles/1/exercises/" + id + "/images")
-          .then((response) => {
-            this.imgs[id-1]=response.data.results[0].url;
-          })
-    }
 
   },
 };

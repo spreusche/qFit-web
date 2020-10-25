@@ -66,7 +66,7 @@
                           {{ routinesE[index].detail }}
                         </v-card-text>
                       <hr/>
-                      
+
 
                       <v-card-subtitle> <h2><u>Ejercicios que encontrará en esta rutina:</u></h2></v-card-subtitle>
                           <v-list>
@@ -88,9 +88,9 @@
                           </v-list-item>
                           </v-list>
 
-                      
-                     
-                     
+
+
+
 
                     </v-card>
         </div>
@@ -133,7 +133,7 @@ export default {
       errorOccured: false,
       j: 0,
 
-      
+
       i: 0,
       cycleIDs: [0,0,0],
       routineContent: [],
@@ -143,6 +143,7 @@ export default {
       ppalD: [],
       enfriamiento: [],
       enfriamientoD: [],
+      cantFavs: 1,
     };
   },
   beforeCreate: function () {
@@ -168,7 +169,7 @@ export default {
 
     },
     methods:{
-     
+
      saveIndex: function(index){
               this.routineDialog = !this.routineDialog
               this.index = index;
@@ -181,7 +182,7 @@ export default {
         this.entradaD = [];
         this.ppalD = [];
         this.enfriamientoD = [];
-        
+
         this.axios
           //get CycleIDs
           .get(UserApi.baseUrl + "/routines/" + id + "/cycles/")
@@ -258,7 +259,47 @@ export default {
             .catch(() => console.log("Error al obtener los datos de rutinas"));
 
       }
-    }
+    },
+
+  created() {
+    this.axios
+    .get(UserApi.baseUrl + "/user/current/routines/favourites")
+    .then((response) => {
+      console.log(response.data.totalCount);
+      this.cantFavs=response.data.totalCount;
+      if(this.cantFavs == 0) { //le creo el masterRoutine al usuario, donde este tendrá una lista de todos sus ejercicios
+
+      this.axios
+          .post(UserApi.baseUrl + "/routines", {
+            name: "Master Routine",
+            detail: "Esta rutina contiene un ciclo con todos los ejercicios creados por el current user",
+            isPublic: true,
+            difficulty: "expert",
+            category: {
+              id: 1,
+            }
+          }) //y ahora creo el masterCycle
+          .then((response) => {
+            console.log("andtro del segundo then")
+            this.masterRoutine = response.data.id;
+            this.axios
+                .post(UserApi.baseUrl + "/routines/" + this.masterRoutine + "/cycles/", {
+                  name: "Master Cycle",
+                  detail: "Este ciclo contiene una copia de todos los ejercicios del current user",
+                  type: "warmup",
+                  order: this.cantFavs+2,
+                  repetitions: 1,
+                })
+                .then((response) => { //lo voy a poner acá porque me ha tirado errores al ser asincronico
+                  console.log(response); //para que no me tire error por no usar el response
+                  this.axios
+                      .post(UserApi.baseUrl + "/user/current/routines/" + this.masterRoutine + "/favourites") //marco al master routine como primera favorita
+                  this.megaFlag = true;
+                })
+          }) //listo, ahora todos los usuarios tienen al Master Routine como primera favorita
+      }
+    })
+  }
 }
 </script>
 

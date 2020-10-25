@@ -8,17 +8,17 @@
 
       <v-spacer></v-spacer>
       <!--  debaja porque entra en un loop @click=$router.go(-1)  -->
-      <v-btn color="error" v-if="!se_creo" :to="{name:'MisRutinas'}" 
+      <v-btn color="error" v-if="!se_creo" :to="{name:'MisRutinas'}"
       > CANCELAR </v-btn>
 
       <v-btn color="blue" v-if="se_creo" dark
-      @click="this.cambiarflag" 
+      @click="this.cambiarflag"
       > VOLVER </v-btn>
 
       <v-btn
         @click="this.editRoutine"
       color="blue ml-3 mr-1"
-      dark 
+      dark
       v-if="!se_creo"
       >
         SIGUIENTE
@@ -108,7 +108,7 @@
       </v-col>
     </v-row>
 
-   
+
 
     <v-row v-if="se_creo">
       <v-col>
@@ -177,7 +177,7 @@
              this.description = response.data.detail;
              this.difficulty = response.data.difficulty;
            })
-           .catch(() => console.log("errorciño agarrando los datos de la api"));
+           .catch(() => console.log("error agarrando los datos de la api"));
         this.title="Editar Rutina";
      } else {
        this.title = "Crear Rutina";

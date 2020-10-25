@@ -22,7 +22,7 @@
          Ejercicio en blanco
         </v-list-item>
 
-       <div v-for="routine in routines" :key="routine" >
+       <div v-for="routine in cycleToShow" :key="routine" >
          <v-list-item @click="chooseRoutine(routine)">
            <h3>{{routine.name}}</h3>
             :
@@ -85,7 +85,7 @@
                 ></v-textarea>
               </v-col>
             </v-row>
-            
+
             <v-row>
               <v-col cols="3">
                 <v-header><h3>Tipo:</h3></v-header>
@@ -95,9 +95,9 @@
               </v-col>
           </v-row>
 
-           
 
-           
+
+
 
           </v-form>
         </v-card>
@@ -106,7 +106,7 @@
       <v-col>
         <v-card elevation="0">
 
-          
+
 
           <v-row>
               <v-col cols="3">
@@ -151,7 +151,9 @@ export default {
     numberRules: [
       v => /^[0-9]\d*$/.test(v) || 'Debe ser un número entero',
       v => !!v || 'Debe ser un número entero'],
-    routines: [],
+    cycleToShow: [],
+    masterRoutine: 0,
+    masterCycle: 0,
 
   }),
 
@@ -161,10 +163,22 @@ export default {
     this.routineID=this.$route.params.routineID;
 
     this.axios
-    .get(UserApi.baseUrl + "/routines/1/cycles/1/exercises")
-    .then((response) => {
-      this.routines=response.data.results;
-    })
+        .get(UserApi.baseUrl + "/user/current/routines/favourites")
+        .then((response) => {
+          this.masterRoutine = response.data.results[0].id;
+          this.axios
+              .get(UserApi.baseUrl + "/routines/" + this.masterRoutine + "/cycles")
+              .then((response) => {
+                this.masterCycle = response.data.results[0].id;
+                //ahora estan bien guardados los datos this.masterCycle y this.masterRoutine, voy a agarrar el cyclo para mostrarlo
+                this.axios
+                    .get(UserApi.baseUrl + "/routines/" + this.masterRoutine + "/cycles/" + this.masterCycle + "/exercises")
+                    .then((response) => {
+                      this.cycleToShow = response.data.results;
+                      console.log(this.cycleToShow)
+                    })
+              }).catch(() => console.log("error agarrando los datos de masterCycle"));
+        }).catch(() => console.log("error agarrando los datos de la api"));
 
     if(this.$route.params.exerciseID != null){
       this.fillBoxes();
@@ -216,17 +230,29 @@ export default {
               //estos dos de abajo son los obligatorios
               duration: parseInt(this.duration),
               repetitions: parseInt(this.repetitions),
-            }).catch(() => console.log("errorciño agregando el ejercicio"));
-        //y ahora la agrego al masterCycle también
+            }).catch(() => console.log("error agregando el ejercicio"));
+        //primero veo cual routine/cycle es el masterCycle
         this.axios
-            .post(UserApi.baseUrl + "/routines/1/cycles/1/exercises/", {
-              name: this.name,
-              detail: this.detail,
-              type: this.type,
-              //estos dos de abajo son los obligatorios
-              duration: parseInt(this.duration),
-              repetitions: parseInt(this.repetitions),
-            }).catch(() => console.log("errorciño agregando al mastercycle"));
+            .get(UserApi.baseUrl + "/user/current/routines/favourites")
+            .then((response) => {
+              this.masterRoutine=response.data.results[0].id;
+              this.axios
+                  .get(UserApi.baseUrl + "/routines/" + this.masterRoutine + "/cycles")
+                  .then((response) => {
+                    this.masterCycle=response.data.results[0].id;
+                    //y ahora si agrego el nuevo ejercicio a masterCycle
+                    if(this.routineID != this.masterRoutine) {
+                      this.axios
+                          .post(UserApi.baseUrl + "/routines/" + this.masterRoutine + "/cycles/" + this.masterCycle + "/exercises/", {
+                            name: this.name,
+                            detail: this.detail,
+                            type: this.type,
+                            duration: parseInt(this.duration),
+                            repetitions: parseInt(this.repetitions),
+                          }).catch(() => console.log("error agregando a masterCycle"));
+                    }
+                  })
+            }).catch(() => console.log("error agarrando los datos de masterCycle"));
       } else {
         this.axios
             .put(UserApi.baseUrl + "/routines/" + this.routineID + "/cycles/" + this.cycleID + "/exercises/" + this.$route.params.exerciseID, {
@@ -236,7 +262,7 @@ export default {
               //estos dos de abajo son los obligatorios
               duration: parseInt(this.duration),
               repetitions: parseInt(this.repetitions),
-            }).catch(() => console.log("errorciño editando el ejercicio"));
+            }).catch(() => console.log("error editando el ejercicio"));
       }
       alert("Ejercicio Guardado");
 

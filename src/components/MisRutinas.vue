@@ -1,7 +1,7 @@
 <template >
   <v-container fluid id="Mis Rutinas">
     <v-row>
-     
+
         <h1>Mis Rutinas</h1>
      <v-spacer></v-spacer>
       <v-btn
@@ -15,7 +15,7 @@
           + Crear Rutina
         </v-btn>
     </v-row>
-    
+
     <v-row>
       <v-col cols="2">
 
@@ -95,7 +95,7 @@
                 <h3>Categoría: </h3> {{ routine.category.name }}
               </v-list-item>
               <v-list-item>
-                <h3>Contenido: </h3> 
+                <h3>Contenido: </h3>
               </v-list-item>
                <v-list-item><u>Entrada en calor:</u></v-list-item>
 
@@ -257,5 +257,6 @@ export default {
       UserApi.currID(num);
     },
   },
-  };
+
+};
 </script>
